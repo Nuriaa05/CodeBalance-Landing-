@@ -6,27 +6,27 @@ import { Shield, Lock, Eye, FileCheck } from "lucide-react";
 const securityFeatures = [
   {
     icon: Shield,
-    title: "SOC 2 Type II",
-    description: "Controles de seguridad auditados de forma independiente y monitoreo continuo.",
+    title: "Hosting confiable",
+    description: "Desplegamos en plataformas reconocidas (Vercel, Netlify, AWS) con HTTPS por defecto y monitoreo de disponibilidad.",
   },
   {
     icon: Lock,
-    title: "Cifrado de extremo a extremo",
-    description: "Cifrado AES-256 para datos en reposo y TLS 1.3 para datos en tránsito.",
+    title: "Buenas prácticas de desarrollo",
+    description: "Manejo seguro de credenciales y variables de entorno, control de versiones y revisión de código en cada entrega.",
   },
   {
     icon: Eye,
-    title: "Arquitectura zero trust",
-    description: "Cada solicitud se autentica y autoriza. Sin excepciones.",
+    title: "Confidencialidad",
+    description: "Cuando el proyecto lo requiere, firmamos acuerdo de confidencialidad (NDA). La información de tu negocio y tus clientes no se comparte con terceros.",
   },
   {
     icon: FileCheck,
-    title: "GDPR & HIPAA",
-    description: "Cumplimiento integral de normas de protección de datos y salud.",
+    title: "Cumplimiento con la normativa argentina",
+    description: "Diseñamos formularios y bases de datos respetando la Ley de Protección de Datos Personales (25.326).",
   },
 ];
 
-const certifications = ["SOC 2", "ISO 27001", "HIPAA", "GDPR", "CCPA"];
+const certifications = ["HTTPS", "Ley 25.326", "Backups", "Confidencialidad"];
 
 export function SecuritySection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -64,8 +64,7 @@ export function SecuritySection() {
               innegociable.
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed mb-12">
-              La seguridad de nivel empresarial no es opcional. Está integrada en cada capa
-              de la plataforma, desde la infraestructura hasta la aplicación.
+              No vendemos humo: trabajamos con buenas prácticas de desarrollo, hosting confiable y respeto por la información de tu negocio y tus clientes en cada proyecto que entregamos.
             </p>
 
             {/* Certifications */}

@@ -5,9 +5,14 @@ import { AnimatedWave } from "./animated-wave";
 
 const footerLinks = {
   CodeBalance: [
+    { name: "Inicio", href: "#inicio" },
     { name: "Servicios", href: "#features" },
-    { name: "Cómo funciona", href: "#how-it-works" },
+    { name: "Cómo trabajamos", href: "#how-it-works" },
+    { name: "Casos de éxito", href: "#infraestructura" },
     { name: "Tecnologías", href: "#integrations" },
+    { name: "Seguridad", href: "#security" },
+    { name: "Nosotros", href: "#developers" },
+    { name: "Testimonios", href: "#testimonios" },
     { name: "Contacto", href: "#contacto" },
   ],
 };
@@ -44,8 +49,8 @@ export function FooterSection() {
                 <span className="text-2xl font-display">CodeBalance</span>
               </a>
 
-              <p className="text-muted-foreground leading-relaxed mb-8 max-w-xs">
-                La plataforma para equipos que lanzan. Crea, despliega y escala con velocidad excepcional.
+              <p className="text-muted-foreground leading-relaxed mb-8 max-w-md">
+                En CodeBalance ayudamos a emprendedores, profesionales y empresas a fortalecer su presencia digital y optimizar sus procesos mediante soluciones integrales de tecnología, marketing y finanzas.
               </p>
 
               {/* Social Links */}
@@ -91,13 +96,6 @@ export function FooterSection() {
           <p className="text-sm text-muted-foreground">
             2026 CodeBalance. Todos los derechos reservados.
           </p>
-
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-accent" />
-              Todos los sistemas operativos
-            </span>
-          </div>
         </div>
       </div>
     </footer>
