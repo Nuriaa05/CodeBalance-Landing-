@@ -2,30 +2,73 @@
 
 import { useEffect, useState, useRef } from "react";
 
-const locations = [
+type ProjectStatus = "production" | "development";
+type ProjectLinkKey =
+  | "stockAdmin"
+  | "medicalLanding"
+  | "chacoImplantes"
+  | "ecommerceBackend"
+  | "lozanoManagement"
+  | "neutronMarketing";
+
+const projectLinks: Record<ProjectLinkKey, string | null> = {
+  // TODO: agregar link real cuando esté disponible.
+  stockAdmin: null,
+  medicalLanding: null,
+  chacoImplantes: null,
+  ecommerceBackend: null,
+  lozanoManagement: null,
+  neutronMarketing: null,
+};
+
+const projects: Array<{
+  id: ProjectLinkKey;
+  name: string;
+  category: string;
+  status: ProjectStatus;
+  href: string | null;
+}> = [
   {
-    city: "NR Fundas Personalizadas",
-    region: "E-commerce · En producción",
+    id: "stockAdmin",
+    name: "Sistema administrativo de stock",
+    category: "Sistema de gestión · En producción",
     status: "production",
-    link: "#",
+    href: projectLinks.stockAdmin,
   },
   {
-    city: "Chaco Implantes",
-    region: "Sitio institucional · En producción",
+    id: "medicalLanding",
+    name: "Landing médica profesional",
+    category: "Sitio institucional · En producción",
     status: "production",
-    link: "#",
+    href: projectLinks.medicalLanding,
   },
   {
-    city: "Neutron Tecnología SAS",
-    region: "Plataforma e-commerce · En desarrollo",
+    id: "chacoImplantes",
+    name: "Chaco Implantes",
+    category: "Sitio institucional · En desarrollo",
     status: "development",
-    link: "#",
+    href: projectLinks.chacoImplantes,
   },
   {
-    city: "Landing médica — completar nombre",
-    region: "Salud · En producción",
+    id: "ecommerceBackend",
+    name: "Backend e-commerce",
+    category: "Backend a medida · En desarrollo",
+    status: "development",
+    href: projectLinks.ecommerceBackend,
+  },
+  {
+    id: "lozanoManagement",
+    name: "Sistema de gestión — Lozano Congelados",
+    category: "Sistema de gestión · En desarrollo",
+    status: "development",
+    href: projectLinks.lozanoManagement,
+  },
+  {
+    id: "neutronMarketing",
+    name: "Neutron Tecnología SAS",
+    category: "Marketing y presencia digital · En producción",
     status: "production",
-    link: "#",
+    href: projectLinks.neutronMarketing,
   },
 ];
 
@@ -39,6 +82,33 @@ const statusDotStyles = {
     idle: "bg-[#b9923c]/55",
   },
 };
+
+function ProjectCaseButton({ href }: { href: string | null }) {
+  const buttonClassName =
+    "shrink-0 rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200";
+
+  if (!href) {
+    return (
+      <span
+        aria-disabled="true"
+        className={`${buttonClassName} cursor-not-allowed opacity-45`}
+      >
+        Ver caso
+      </span>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`${buttonClassName} hover:bg-[#0f60ec] hover:text-white`}
+    >
+      Ver caso
+    </a>
+  );
+}
 
 export function InfrastructureSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -59,7 +129,7 @@ export function InfrastructureSection() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveLocation((prev) => (prev + 1) % locations.length);
+      setActiveLocation((prev) => (prev + 1) % projects.length);
     }, 2000);
     return () => clearInterval(interval);
   }, []);
@@ -121,42 +191,31 @@ export function InfrastructureSection() {
                 </span>
               </div>
 
-              {/* Locations */}
+              {/* Projects */}
               <div>
-                {locations.map((location, index) => {
-                  const statusClass = statusDotStyles[location.status as keyof typeof statusDotStyles];
+                {projects.map((project, index) => {
+                  const statusClass = statusDotStyles[project.status];
                   const isActive = activeLocation === index;
 
                   return (
                   <div
-                    key={location.city}
-                    className={`px-6 py-5 border-b border-foreground/5 last:border-b-0 flex items-center justify-between transition-all duration-300 ${
+                    key={project.id}
+                    className={`px-6 py-5 border-b border-foreground/5 last:border-b-0 flex items-center justify-between gap-4 transition-all duration-300 ${
                       isActive ? "bg-accent/10" : ""
                     }`}
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex min-w-0 items-center gap-4">
                       <span 
-                        className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                        className={`h-2 w-2 shrink-0 rounded-full transition-colors duration-300 ${
                           isActive ? statusClass.active : statusClass.idle
                         }`}
                       />
-                      <div>
-                        <div className="font-medium">{location.city}</div>
-                        <div className="text-sm text-muted-foreground">{location.region}</div>
+                      <div className="min-w-0">
+                        <div className="font-medium">{project.name}</div>
+                        <div className="text-sm text-muted-foreground">{project.category}</div>
                       </div>
                     </div>
-                    {isActive ? (
-                      <a
-                        href={location.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="shrink-0 rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200 hover:bg-[#0f60ec] hover:text-white"
-                      >
-                        Ver caso
-                      </a>
-                    ) : (
-                      <span className="w-[72px]" aria-hidden="true" />
-                    )}
+                    <ProjectCaseButton href={project.href} />
                   </div>
                   );
                 })}

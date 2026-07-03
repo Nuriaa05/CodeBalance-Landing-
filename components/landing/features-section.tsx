@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 type VisualType = "web" | "deploy" | "ai" | "collab" | "digital";
@@ -8,6 +8,7 @@ type VisualType = "web" | "deploy" | "ai" | "collab" | "digital";
 const WHATSAPP_BASE_URL = "https://wa.me/5493625335330";
 const OUTLINE_CTA_CLASS =
   "inline-flex shrink-0 items-center justify-center rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200 hover:bg-[#0f60ec] hover:text-white";
+const SERVICE_SCROLL_DELAY_MS = 420;
 
 function whatsappMessageUrl(message: string) {
   return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(message)}`;
@@ -105,7 +106,7 @@ const servicePillars = [
       {
         name: "Marketing",
         description:
-          "Impulsamos el crecimiento de tu marca con estrategias orientadas a resultados, combinando creatividad, análisis y publicidad digital para atraer clientes y aumentar conversiones.",
+          "Diseñamos estrategias para optimizar la rentabilidad, ordenar las finanzas, mejorar el control del negocio y crecer con planificación: precios, presupuestos, rentabilidad, proyecciones y planificación estratégica. Manejo impositivo de monotributibutistas y responsables inscriptos -persona física-.",
       },
     ],
   },
@@ -471,16 +472,25 @@ function ServicePillarCard({
   index,
   isOpen,
   onToggle,
+  registerCardRef,
 }: {
   pillar: typeof servicePillars[0];
   index: number;
   isOpen: boolean;
   onToggle: () => void;
+  registerCardRef: (number: string, node: HTMLDivElement | null) => void;
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const detailsRef = useRef<HTMLDivElement>(null);
   const contentId = `service-pillar-${pillar.number}`;
+
+  const setCardNode = useCallback(
+    (node: HTMLDivElement | null) => {
+      cardRef.current = node;
+      registerCardRef(pillar.number, node);
+    },
+    [pillar.number, registerCardRef]
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -494,34 +504,10 @@ function ServicePillarCard({
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    let scrollTimer: number | undefined;
-    const frameId = window.requestAnimationFrame(() => {
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      scrollTimer = window.setTimeout(
-        () => {
-          detailsRef.current?.scrollIntoView({
-            behavior: prefersReducedMotion ? "auto" : "smooth",
-            block: "start",
-          });
-        },
-        prefersReducedMotion ? 0 : 120
-      );
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-      if (scrollTimer) window.clearTimeout(scrollTimer);
-    };
-  }, [isOpen]);
-
   return (
     <div
-      ref={cardRef}
-      className={`group relative border transition-[border-color,background-color,box-shadow,opacity,transform] hover:border-accent/40 motion-reduce:transition-none ${
+      ref={setCardNode}
+      className={`group relative scroll-mt-[104px] border transition-[border-color,background-color,box-shadow,opacity,transform] hover:border-accent/40 motion-reduce:transition-none md:scroll-mt-[120px] ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       } ${
         isOpen
@@ -585,8 +571,7 @@ function ServicePillarCard({
       >
         <div className="min-h-0 overflow-hidden">
           <div
-            ref={detailsRef}
-            className={`scroll-mt-[120px] px-5 pb-6 transition-[opacity,transform] motion-reduce:transition-none sm:px-8 lg:scroll-mt-[136px] lg:pb-8 ${
+            className={`px-5 pb-6 transition-[opacity,transform] motion-reduce:transition-none sm:px-8 lg:pb-8 ${
               isOpen
                 ? "translate-y-0 opacity-100 delay-75 duration-[240ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                 : "translate-y-3 opacity-0 delay-0 duration-[180ms] ease-[cubic-bezier(0.4,0,1,1)]"
@@ -630,6 +615,80 @@ export function FeaturesSection() {
   const [isVisible, setIsVisible] = useState(false);
   const [openPillar, setOpenPillar] = useState("");
   const sectionRef = useRef<HTMLDivElement>(null);
+  const serviceRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const scrollTimeoutRef = useRef<number | undefined>(undefined);
+  const scrollFrameRef = useRef<number | undefined>(undefined);
+
+  const clearPendingServiceScroll = useCallback(() => {
+    if (scrollTimeoutRef.current !== undefined) {
+      window.clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = undefined;
+    }
+
+    if (scrollFrameRef.current !== undefined) {
+      window.cancelAnimationFrame(scrollFrameRef.current);
+      scrollFrameRef.current = undefined;
+    }
+  }, []);
+
+  const registerServiceRef = useCallback((number: string, node: HTMLDivElement | null) => {
+    serviceRefs.current[number] = node;
+  }, []);
+
+  const scrollToServiceCard = useCallback((number: string) => {
+    const el = serviceRefs.current[number];
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const headerRect = document.querySelector("header")?.getBoundingClientRect();
+    const headerBottom =
+      headerRect?.bottom ?? headerRect?.height ?? (window.innerWidth < 768 ? 88 : 96);
+    const extraOffset = window.innerWidth < 768 ? 36 : 28;
+    const offset = headerBottom + extraOffset;
+    const rect = el.getBoundingClientRect();
+    const comfortableMaxTop = Math.min(offset + 150, window.innerHeight * 0.38);
+    const isComfortablyVisible = rect.top >= offset && rect.top <= comfortableMaxTop;
+
+    if (isComfortablyVisible) return;
+
+    window.scrollTo({
+      top: Math.max(rect.top + window.scrollY - offset, 0),
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
+  }, []);
+
+  const scheduleServiceScroll = useCallback(
+    (number: string) => {
+      clearPendingServiceScroll();
+
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const delay = prefersReducedMotion ? 0 : SERVICE_SCROLL_DELAY_MS;
+
+      scrollTimeoutRef.current = window.setTimeout(() => {
+        scrollFrameRef.current = window.requestAnimationFrame(() => {
+          scrollFrameRef.current = window.requestAnimationFrame(() => {
+            scrollToServiceCard(number);
+          });
+        });
+      }, delay);
+    },
+    [clearPendingServiceScroll, scrollToServiceCard]
+  );
+
+  const handlePillarToggle = useCallback(
+    (number: string) => {
+      const next = openPillar === number ? "" : number;
+
+      setOpenPillar(next);
+
+      if (next) {
+        scheduleServiceScroll(next);
+      } else {
+        clearPendingServiceScroll();
+      }
+    },
+    [clearPendingServiceScroll, openPillar, scheduleServiceScroll]
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -642,6 +701,10 @@ export function FeaturesSection() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    return () => clearPendingServiceScroll();
+  }, [clearPendingServiceScroll]);
 
   return (
     <section
@@ -675,7 +738,8 @@ export function FeaturesSection() {
               pillar={pillar}
               index={index}
               isOpen={openPillar === pillar.number}
-              onToggle={() => setOpenPillar((current) => (current === pillar.number ? "" : pillar.number))}
+              onToggle={() => handlePillarToggle(pillar.number)}
+              registerCardRef={registerServiceRef}
             />
           ))}
         </div>

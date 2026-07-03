@@ -132,9 +132,9 @@ function TechnologyCard({ technology, setIndex }: { technology: Technology; setI
 
 function TechnologyRow({ technologies, reverse = false }: { technologies: Technology[]; reverse?: boolean }) {
   return (
-    <div className={`flex gap-5 ${reverse ? "marquee-reverse" : "marquee"}`}>
+    <div className={`flex w-max ${reverse ? "marquee-reverse" : "marquee"}`}>
       {[...Array(2)].map((_, setIndex) => (
-        <div key={setIndex} className="flex shrink-0 gap-5">
+        <div key={setIndex} className="flex shrink-0 gap-5 pr-5" aria-hidden={setIndex > 0}>
           {technologies.map((technology) => (
             <TechnologyCard key={`${technology.name}-${setIndex}`} technology={technology} setIndex={setIndex} />
           ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { Code2, Megaphone, TrendingUp, type LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const aboutParagraphs = [
@@ -10,7 +11,11 @@ const aboutParagraphs = [
   "Nuestro objetivo es convertirnos en un aliado para empresas y emprendedores que buscan centralizar sus necesidades en un solo lugar, con un equipo que comprende tanto la parte técnica como la financiera de cada decisión.",
 ];
 
-const chips = ["Desarrollo web", "Estrategia financiera", "Marketing"];
+const chips: Array<{ label: string; Icon: LucideIcon }> = [
+  { label: "Desarrollo web", Icon: Code2 },
+  { label: "Estrategia financiera", Icon: TrendingUp },
+  { label: "Marketing", Icon: Megaphone },
+];
 
 export function DevelopersSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -38,8 +43,12 @@ export function DevelopersSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <div className="relative pr-4 pb-8 sm:pr-0">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-foreground/10 bg-card/60">
+            <div className="relative">
+              <div
+                className="pointer-events-none absolute -left-4 -top-4 z-0 h-full w-full rounded-2xl border-2 border-foreground"
+                aria-hidden="true"
+              />
+              <div className="relative z-10 aspect-[4/5] overflow-hidden rounded-2xl border border-foreground/10 bg-card/60">
                 <Image
                   src="/about-team.png"
                   alt="Equipo de CodeBalance"
@@ -47,13 +56,6 @@ export function DevelopersSection() {
                   sizes="(min-width: 1024px) 42vw, 100vw"
                   className="h-full w-full object-cover"
                 />
-              </div>
-
-              <div className="absolute bottom-0 right-0 border border-foreground/10 bg-card px-6 py-5 shadow-[0_18px_50px_rgba(18,30,82,0.14)] sm:-right-4 sm:-bottom-4">
-                <div className="font-display text-5xl leading-none text-foreground">+15</div>
-                <div className="mt-2 text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
-                  proyectos entregados
-                </div>
               </div>
             </div>
           </div>
@@ -89,12 +91,13 @@ export function DevelopersSection() {
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                {chips.map((chip) => (
+                {chips.map(({ label, Icon }) => (
                   <span
-                    key={chip}
-                    className="rounded-full border border-foreground/10 px-5 py-2 text-[13px] text-muted-foreground sm:text-sm"
+                    key={label}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-foreground/10 py-1.5 pl-3 pr-4 text-[13px] text-muted-foreground sm:text-sm"
                   >
-                    {chip}
+                    <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    {label}
                   </span>
                 ))}
               </div>
