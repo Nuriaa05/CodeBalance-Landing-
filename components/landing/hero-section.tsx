@@ -5,15 +5,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { AnimatedSphere } from "./animated-sphere";
 
-const words = ["create", "build", "scale", "ship"];
+const words = ["crear", "construir", "escalar", "lanzar"];
 
 export function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false);
   const [wordIndex, setWordIndex] = useState(0);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,27 +52,22 @@ export function HeroSection() {
       
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 py-32 lg:py-40">
         {/* Eyebrow */}
-        <div 
-          className={`mb-8 transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
+        <div className="mb-8">
           <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground">
             <span className="w-8 h-px bg-foreground/30" />
-            The platform for modern teams
+            La plataforma para equipos modernos
           </span>
         </div>
         
         {/* Main headline */}
         <div className="mb-12">
-          <h1 
-            className={`text-[clamp(3rem,12vw,10rem)] font-display leading-[0.9] tracking-tight transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          <h1
+            className="text-[clamp(3rem,12vw,10rem)] font-display leading-[0.9] tracking-tight"
+            aria-label={`La agencia para ${words[wordIndex]}`}
           >
-            <span className="block">The platform</span>
-            <span className="block">
-              to{" "}
+            <span className="block" aria-hidden="true">La agencia</span>
+            <span className="block" aria-hidden="true">
+              para{" "}
               <span className="relative inline-block">
                 <span 
                   key={wordIndex}
@@ -103,66 +93,33 @@ export function HeroSection() {
         
         {/* Description */}
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-end">
-          <p 
-            className={`text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-xl transition-all duration-700 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
-            Your toolkit to stop configuring and start innovating. 
-            Securely build, deploy, and scale the best experiences.
+          <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-xl">
+            En CodeBalance combinamos creatividad, análisis y tecnología para ofrecer soluciones personalizadas que impulsen el crecimiento de negocios en un entorno cada vez más digital.
           </p>
           
           {/* CTAs */}
-          <div 
-            className={`flex flex-col sm:flex-row items-start gap-4 transition-all duration-700 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <div className="flex flex-col sm:flex-row items-start gap-4">
             <Button 
+              asChild
               size="lg" 
               className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group"
             >
-              Start free trial
-              <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+              <a href="#contacto">
+                Contactanos
+                <ArrowRight data-icon="inline-end" className="ml-2 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </a>
             </Button>
             <Button 
+              asChild
               size="lg" 
               variant="outline" 
-              className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5"
+              className="h-14 px-8 text-base rounded-full border-foreground/20 bg-card/35 hover:bg-accent/10"
             >
-              Watch demo
+              <a href="#infraestructura">Ver casos</a>
             </Button>
           </div>
         </div>
         
-      </div>
-      
-      {/* Stats marquee - full width outside container */}
-      <div 
-        className={`absolute bottom-24 left-0 right-0 transition-all duration-700 delay-500 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="flex gap-16 marquee whitespace-nowrap">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-16">
-              {[
-                { value: "20 days", label: "saved on builds", company: "NETFLIX" },
-                { value: "98%", label: "faster deployment", company: "STRIPE" },
-                { value: "300%", label: "throughput increase", company: "LINEAR" },
-                { value: "6x", label: "faster to ship", company: "NOTION" },
-              ].map((stat) => (
-                <div key={`${stat.company}-${i}`} className="flex items-baseline gap-4">
-                  <span className="text-4xl lg:text-5xl font-display">{stat.value}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {stat.label}
-                    <span className="block font-mono text-xs mt-1">{stat.company}</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
       </div>
       
       {/* Scroll indicator */}

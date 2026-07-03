@@ -2,8 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { siWhatsapp, type SimpleIcon } from "simple-icons";
 import { AnimatedTetrahedron } from "./animated-tetrahedron";
+
+const WHATSAPP_URL = "https://wa.me/5493625335330";
+
+function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+      <path d={icon.path} fill="currentColor" />
+    </svg>
+  );
+}
 
 export function CtaSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -31,10 +41,10 @@ export function CtaSection() {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="contacto" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div
-          className={`relative border border-foreground transition-all duration-1000 ${
+          className={`relative border border-foreground/20 bg-card/60 shadow-[0_32px_90px_rgba(18,30,82,0.10)] transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
           onMouseMove={handleMouseMove}
@@ -43,7 +53,7 @@ export function CtaSection() {
           <div 
             className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-300"
             style={{
-              background: `radial-gradient(600px circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(0,0,0,0.15), transparent 40%)`
+              background: `radial-gradient(600px circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(var(--navy-accent-rgb), 0.35), transparent 40%)`
             }}
           />
           
@@ -52,36 +62,28 @@ export function CtaSection() {
               {/* Left content */}
               <div className="flex-1">
                 <h2 className="text-4xl lg:text-7xl font-display tracking-tight mb-8 leading-[0.95]">
-                  Ready to build
+                  Listo para crear
                   <br />
-                  something great?
+                  algo grande?
                 </h2>
 
                 <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-xl">
-                  Join thousands of teams shipping faster with Optimus. 
-                  Start free, scale infinitely.
+                  Súmate a miles de equipos que lanzan más rápido con CodeBalance.
+                  Empieza gratis y escala sin límites.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-start gap-4">
                   <Button
+                    asChild
                     size="lg"
                     className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group"
                   >
-                    Start building free
-                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5"
-                  >
-                    Talk to sales
+                    <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                      <SimpleIconLogo icon={siWhatsapp} />
+                      Contactanos
+                    </a>
                   </Button>
                 </div>
-
-                <p className="text-sm text-muted-foreground mt-8 font-mono">
-                  No credit card required
-                </p>
               </div>
 
               {/* Right animation */}

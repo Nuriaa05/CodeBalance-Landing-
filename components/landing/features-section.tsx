@@ -1,31 +1,105 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 
-const features = [
+type VisualType = "deploy" | "ai" | "collab" | "security";
+
+const servicePillars = [
   {
     number: "01",
-    title: "Instant Deployment",
-    description: "Push to production in seconds. Our edge network ensures your applications load instantly, anywhere in the world.",
-    visual: "deploy",
+    title: "Desarrollo web",
+    summary: "Sitios y tiendas pensadas para presentar, vender y convertir con claridad.",
+    visual: "deploy" as VisualType,
+    services: [
+      {
+        name: "Landing page",
+        description:
+          "Una sola página enfocada en convertir: presenta tu producto o servicio y lleva al visitante a una acción concreta.",
+      },
+      {
+        name: "Sitio multipage",
+        description:
+          "Varias secciones o páginas conectadas para negocios que necesitan contar más de una historia.",
+      },
+      {
+        name: "E-commerce",
+        description:
+          "Tienda online con catálogo, carrito, checkout y medios de pago integrados, lista para vender.",
+      },
+      {
+        name: "Sitio a medida",
+        description:
+          "Desarrollo a la medida cuando el proyecto necesita funcionalidades, integraciones o flujos propios del negocio.",
+      },
+    ],
   },
   {
     number: "02",
-    title: "AI-Native Workflows",
-    description: "Build intelligent applications with built-in AI capabilities. From inference to training, everything scales automatically.",
-    visual: "ai",
+    title: "Sistemas y automatización",
+    summary: "Herramientas internas, flujos y datos para ordenar la operación diaria.",
+    visual: "ai" as VisualType,
+    services: [
+      {
+        name: "Sistemas de administración y gestión",
+        description:
+          "Paneles y herramientas internas para organizar información, usuarios y operaciones del día a día.",
+      },
+      {
+        name: "Automatización de procesos",
+        description:
+          "Eliminamos tareas repetitivas conectando herramientas y flujos para ganar tiempo y reducir errores.",
+      },
+      {
+        name: "Integración y gestión de base de datos",
+        description:
+          "Diseño, integración y mantenimiento de bases de datos ordenadas, escalables y listas para sostener tu sistema.",
+      },
+    ],
   },
   {
     number: "03",
-    title: "Real-time Collaboration",
-    description: "Work together seamlessly. Live preview, instant feedback, and version control that actually makes sense.",
-    visual: "collab",
+    title: "Presencia digital",
+    summary: "Diseño, integración y SEO para fortalecer cómo se ve y se encuentra tu marca.",
+    visual: "collab" as VisualType,
+    services: [
+      {
+        name: "Diseño e integración",
+        description:
+          "Diseño visual coherente con tu marca, integrado a tu sitio o sistema existente sin romper lo que ya funciona.",
+      },
+      {
+        name: "Mejora de presencia digital (SEO)",
+        description:
+          "Optimización técnica y de contenido para mejorar tu posicionamiento en buscadores y llegar a más clientes.",
+      },
+    ],
   },
   {
     number: "04",
-    title: "Enterprise Security",
-    description: "Bank-grade encryption, SOC 2 compliance, and granular access controls. Your data stays yours.",
-    visual: "security",
+    title: "Estrategia financiera",
+    summary: "Planificación y control para crecer con decisiones basadas en información real.",
+    visual: "security" as VisualType,
+    services: [
+      {
+        name: "Estrategia financiera",
+        description:
+          "Diseñamos estrategias para optimizar la rentabilidad, ordenar las finanzas, mejorar el control del negocio y crecer con planificación: precios, presupuestos, rentabilidad, proyecciones y planificación estratégica.",
+      },
+    ],
+  },
+  {
+    number: "05",
+    title: "Marketing",
+    summary: "Estrategias para atraer clientes, mejorar posicionamiento y aumentar conversiones.",
+    visual: "ai" as VisualType,
+    services: [
+      {
+        name: "Marketing",
+        description:
+          "Impulsamos el crecimiento de tu marca con estrategias orientadas a resultados, combinando creatividad, análisis y publicidad digital para atraer clientes y aumentar conversiones.",
+      },
+    ],
   },
 ];
 
@@ -92,14 +166,17 @@ function AIVisual() {
       {[0, 1, 2, 3, 4, 5].map((i) => {
         const angle = (i * 60) * (Math.PI / 180);
         const radius = 50;
+        const nodeX = Number((100 + Math.cos(angle) * radius).toFixed(4));
+        const nodeY = Number((80 + Math.sin(angle) * radius).toFixed(4));
+
         return (
           <g key={i}>
             {/* Connection line */}
             <line
               x1="100"
               y1="80"
-              x2={100 + Math.cos(angle) * radius}
-              y2={80 + Math.sin(angle) * radius}
+              x2={nodeX}
+              y2={nodeY}
               stroke="currentColor"
               strokeWidth="1"
               opacity="0.3"
@@ -115,8 +192,8 @@ function AIVisual() {
             
             {/* Outer node */}
             <circle
-              cx={100 + Math.cos(angle) * radius}
-              cy={80 + Math.sin(angle) * radius}
+              cx={nodeX}
+              cy={nodeY}
               r="6"
               fill="none"
               stroke="currentColor"
@@ -215,8 +292,8 @@ function SecurityVisual() {
       />
       
       {/* Keyhole */}
-      <circle cx="100" cy="80" r="4" fill="white" />
-      <rect x="98" y="82" width="4" height="8" fill="white" />
+      <circle cx="100" cy="80" r="4" fill="var(--background)" />
+      <rect x="98" y="82" width="4" height="8" fill="var(--background)" />
       
       {/* Scan lines */}
       <line x1="60" y1="60" x2="140" y2="60" stroke="currentColor" strokeWidth="1" opacity="0">
@@ -228,7 +305,7 @@ function SecurityVisual() {
   );
 }
 
-function AnimatedVisual({ type }: { type: string }) {
+function AnimatedVisual({ type }: { type: VisualType }) {
   switch (type) {
     case "deploy":
       return <DeployVisual />;
@@ -243,9 +320,20 @@ function AnimatedVisual({ type }: { type: string }) {
   }
 }
 
-function FeatureCard({ feature, index }: { feature: typeof features[0]; index: number }) {
+function ServicePillarCard({
+  pillar,
+  index,
+  isOpen,
+  onToggle,
+}: {
+  pillar: typeof servicePillars[0];
+  index: number;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const contentId = `service-pillar-${pillar.number}`;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -262,33 +350,67 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
   return (
     <div
       ref={cardRef}
-      className={`group relative transition-all duration-700 ${
+      className={`group relative border border-foreground/10 bg-card/45 transition-[border-color,opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-accent/40 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
       }`}
-      style={{ transitionDelay: `${index * 100}ms` }}
+      style={{ transitionDelay: isVisible ? "0ms" : `${index * 70}ms` }}
     >
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 py-12 lg:py-20 border-b border-foreground/10">
-        {/* Number */}
-        <div className="shrink-0">
-          <span className="font-mono text-sm text-muted-foreground">{feature.number}</span>
-        </div>
-        
-        {/* Content */}
-        <div className="flex-1 grid lg:grid-cols-2 gap-8 items-center">
-          <div>
-            <h3 className="text-3xl lg:text-4xl font-display mb-4 group-hover:translate-x-2 transition-transform duration-500">
-              {feature.title}
-            </h3>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {feature.description}
-            </p>
-          </div>
-          
-          {/* Visual */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="w-48 h-40 text-foreground">
-              <AnimatedVisual type={feature.visual} />
-            </div>
+      <button
+        type="button"
+        className="grid w-full grid-cols-[auto_1fr_auto_auto] items-center gap-4 px-5 py-5 text-left sm:px-8 lg:gap-10 lg:py-8"
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+        onClick={onToggle}
+      >
+        <span className="font-mono text-sm text-muted-foreground">{pillar.number}</span>
+
+        <span className="min-w-0">
+          <span className="block text-2xl font-display leading-tight tracking-tight transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1 sm:text-3xl lg:text-4xl">
+            {pillar.title}
+          </span>
+          <span className="mt-2 block max-w-2xl font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
+            {pillar.summary}
+          </span>
+        </span>
+
+        <span
+          className="flex h-14 w-16 items-center justify-end text-foreground sm:h-24 sm:w-32 lg:h-28 lg:w-40"
+          aria-hidden="true"
+        >
+          <AnimatedVisual type={pillar.visual} />
+        </span>
+
+        <span className="flex h-10 w-10 items-center justify-center border border-foreground/10 bg-background/55 text-foreground transition-colors duration-150 ease-out group-hover:bg-foreground group-hover:text-background">
+          <ChevronDown
+            className={`h-5 w-5 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${isOpen ? "rotate-180" : ""}`}
+            aria-hidden="true"
+          />
+        </span>
+      </button>
+
+      <div
+        id={contentId}
+        className={`grid overflow-hidden transition-[grid-template-rows] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="min-h-0 px-5 pb-6 sm:px-8 lg:pb-8">
+          <div className="border-t border-foreground/10 pt-6">
+            <ul>
+              {pillar.services.map((service) => (
+                <li
+                  key={service.name}
+                  className="grid grid-cols-[150px_minmax(0,1fr)] gap-5 border-b border-foreground/10 py-3.5 last:border-b-0"
+                >
+                  <h3 className="font-sans text-[13px] font-medium leading-relaxed text-foreground/80 sm:text-sm">
+                    {service.name}
+                  </h3>
+                  <p className="font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
+                    {service.description}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -298,6 +420,7 @@ function FeatureCard({ feature, index }: { feature: typeof features[0]; index: n
 
 export function FeaturesSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [openPillar, setOpenPillar] = useState("");
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -323,23 +446,29 @@ export function FeaturesSection() {
         <div className="mb-16 lg:mb-24">
           <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground mb-6">
             <span className="w-8 h-px bg-foreground/30" />
-            Capabilities
+            Servicios
           </span>
           <h2
             className={`text-4xl lg:text-6xl font-display tracking-tight transition-all duration-700 ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            Everything you need.
+            Todo lo necesario.
             <br />
-            <span className="text-muted-foreground">Nothing you don&apos;t.</span>
+            <span className="text-muted-foreground">Nada de más.</span>
           </h2>
         </div>
 
-        {/* Features List */}
-        <div>
-          {features.map((feature, index) => (
-            <FeatureCard key={feature.number} feature={feature} index={index} />
+        {/* Services List */}
+        <div className="grid gap-4">
+          {servicePillars.map((pillar, index) => (
+            <ServicePillarCard
+              key={pillar.number}
+              pillar={pillar}
+              index={index}
+              isOpen={openPillar === pillar.number}
+              onToggle={() => setOpenPillar((current) => (current === pillar.number ? "" : pillar.number))}
+            />
           ))}
         </div>
       </div>

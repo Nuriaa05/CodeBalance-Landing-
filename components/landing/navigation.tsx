@@ -3,13 +3,24 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { siWhatsapp, type SimpleIcon } from "simple-icons";
+
+const WHATSAPP_URL = "https://wa.me/5493625335330";
 
 const navLinks = [
-  { name: "Features", href: "#features" },
-  { name: "How it works", href: "#how-it-works" },
-  { name: "Developers", href: "#developers" },
-  { name: "Pricing", href: "#pricing" },
+  { name: "Servicios", href: "#features" },
+  { name: "Cómo funciona", href: "#how-it-works" },
+  { name: "Nosotros", href: "#developers" },
+  { name: "Contacto", href: "#contacto" },
 ];
+
+function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
+      <path d={icon.path} fill="currentColor" />
+    </svg>
+  );
+}
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,9 +30,22 @@ export function Navigation() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
 
   return (
     <header
@@ -31,11 +55,11 @@ export function Navigation() {
           : "top-0 left-0 right-0"
       }`}
     >
-      <nav 
+      <nav
         className={`mx-auto transition-all duration-500 ${
           isScrolled || isMobileMenuOpen
-            ? "bg-background/80 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-lg max-w-[1200px]"
-            : "bg-transparent max-w-[1400px]"
+            ? "relative z-50 bg-card/80 backdrop-blur-xl border border-foreground/10 rounded-2xl shadow-[0_18px_50px_rgba(18,30,82,0.10)] max-w-[1200px]"
+            : "relative z-50 bg-transparent max-w-[1400px]"
         }`}
       >
         <div 
@@ -45,8 +69,10 @@ export function Navigation() {
         >
           {/* Logo */}
           <a href="#" className="flex items-center gap-2 group">
-            <span className={`font-display tracking-tight transition-all duration-500 ${isScrolled ? "text-xl" : "text-2xl"}`}>Optimus</span>
-            <span className={`text-muted-foreground font-mono transition-all duration-500 ${isScrolled ? "text-[10px] mt-0.5" : "text-xs mt-1"}`}>TM</span>
+            <span className={`font-display tracking-tight transition-all duration-500 ${isScrolled ? "text-xl" : "text-2xl"}`}>
+              <span style={{ color: "#555865" }}>Code</span>
+              <span style={{ color: "#0f60ec" }}>Balance</span>
+            </span>
           </a>
 
           {/* Desktop Navigation */}
@@ -65,27 +91,31 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a href="#" className={`text-foreground/70 hover:text-foreground transition-all duration-500 ${isScrolled ? "text-xs" : "text-sm"}`}>
-              Sign in
-            </a>
             <Button
+              asChild
               size="sm"
               className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
             >
-              Start creating
+              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                <SimpleIconLogo icon={siWhatsapp} />
+                Contactanos
+              </a>
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2"
-            aria-label="Toggle menu"
+            className="md:hidden p-2 transition-transform duration-150 ease-out active:scale-95"
+            aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+            type="button"
           >
             {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6" aria-hidden="true" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6" aria-hidden="true" />
             )}
           </button>
         </div>
@@ -94,6 +124,9 @@ export function Navigation() {
       
       {/* Mobile Menu - Full Screen Overlay */}
       <div
+        id="mobile-navigation"
+        aria-hidden={!isMobileMenuOpen}
+        inert={!isMobileMenuOpen}
         className={`md:hidden fixed inset-0 bg-background z-40 transition-all duration-500 ${
           isMobileMenuOpen 
             ? "opacity-100 pointer-events-auto" 
@@ -130,17 +163,14 @@ export function Navigation() {
           style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
           >
             <Button 
-              variant="outline" 
-              className="flex-1 rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Sign in
-            </Button>
-            <Button 
+              asChild
               className="flex-1 bg-foreground text-background rounded-full h-14 text-base"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Start creating
+              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                <SimpleIconLogo icon={siWhatsapp} />
+                Contactanos
+              </a>
             </Button>
           </div>
         </div>

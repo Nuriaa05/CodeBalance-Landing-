@@ -4,32 +4,32 @@ import { useEffect, useState } from "react";
 
 const testimonials = [
   {
-    quote: "Optimus transformed our deployment pipeline. What used to take hours now happens in seconds.",
+    quote: "CodeBalance transformó nuestro pipeline de despliegue. Lo que antes llevaba horas ahora ocurre en segundos.",
     author: "Sarah Chen",
     role: "CTO",
     company: "Meridian Labs",
-    metric: "10x faster deployments",
+    metric: "Despliegues 10x más rápidos",
   },
   {
-    quote: "The developer experience is unmatched. Our team's productivity has never been higher.",
+    quote: "La experiencia para desarrolladores es excelente. La productividad del equipo nunca estuvo tan alta.",
     author: "Marcus Webb",
-    role: "Engineering Lead",
+    role: "Líder de Ingeniería",
     company: "Flux Systems",
-    metric: "40% more features shipped",
+    metric: "40% más funcionalidades lanzadas",
   },
   {
-    quote: "Finally, infrastructure that scales with our ambition. Zero downtime since we switched.",
+    quote: "Por fin tenemos infraestructura que escala con nuestra ambición. Cero caídas desde la migración.",
     author: "Elena Rodriguez",
-    role: "VP Engineering",
+    role: "VP de Ingeniería",
     company: "Beacon AI",
-    metric: "99.99% uptime",
+    metric: "99.99% de disponibilidad",
   },
   {
-    quote: "The integrations are seamless. We connected our entire stack in a single afternoon.",
+    quote: "Las integraciones son fluidas. Conectamos todo el stack en una sola tarde.",
     author: "James Liu",
-    role: "Founder",
+    role: "Fundador",
     company: "Prism Analytics",
-    metric: "50+ integrations used",
+    metric: "Más de 50 integraciones usadas",
   },
 ];
 
@@ -56,7 +56,7 @@ export function TestimonialsSection() {
         {/* Section Label */}
         <div className="flex items-center gap-4 mb-16">
           <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase">
-            What people say
+            Lo que dicen los equipos
           </span>
           <div className="flex-1 h-px bg-foreground/10" />
           <span className="font-mono text-xs text-muted-foreground">
@@ -73,7 +73,7 @@ export function TestimonialsSection() {
               }`}
             >
               <p className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-tight text-foreground">
-                "{activeTestimonial.quote}"
+                &ldquo;{activeTestimonial.quote}&rdquo;
               </p>
             </blockquote>
 
@@ -83,7 +83,7 @@ export function TestimonialsSection() {
                 isAnimating ? "opacity-0" : "opacity-100"
               }`}
             >
-              <div className="w-16 h-16 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-card/70 border border-foreground/10 flex items-center justify-center">
                 <span className="font-display text-2xl text-foreground">
                   {activeTestimonial.author.charAt(0)}
                 </span>
@@ -100,12 +100,12 @@ export function TestimonialsSection() {
           {/* Metric Highlight */}
           <div className="lg:col-span-4 flex flex-col justify-center">
             <div
-              className={`p-8 border border-foreground/10 transition-all duration-300 ${
+              className={`p-8 border border-foreground/10 bg-card/55 transition-all duration-300 ${
                 isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
               }`}
             >
               <span className="font-mono text-xs tracking-widest text-muted-foreground uppercase block mb-4">
-                Key Result
+                Resultado clave
               </span>
               <p className="font-display text-3xl md:text-4xl text-foreground">
                 {activeTestimonial.metric}
@@ -138,7 +138,7 @@ export function TestimonialsSection() {
         {/* Company Logos Marquee Label */}
         <div className="mt-24 pt-12 border-t border-foreground/10">
           <p className="font-mono text-xs tracking-widest text-muted-foreground uppercase mb-8 text-center">
-            Trusted by forward-thinking teams
+            Elegido por equipos que construyen el futuro
           </p>
         </div>
       </div>

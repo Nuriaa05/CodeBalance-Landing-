@@ -1,29 +1,15 @@
 import React from "react"
 import type { Metadata } from 'next'
-import { Instrument_Sans, Instrument_Serif, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const instrumentSans = Instrument_Sans({ 
-  subsets: ["latin"],
-  variable: '--font-instrument'
-});
-
-const instrumentSerif = Instrument_Serif({ 
-  subsets: ["latin"],
-  weight: "400",
-  variable: '--font-instrument-serif'
-});
-
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ["latin"],
-  variable: '--font-jetbrains'
-});
-
 export const metadata: Metadata = {
-  title: 'Optimus - Platform to Create',
-  description: 'The creative platform for teams who ship. Build, deploy, and scale with unprecedented velocity.',
-  generator: 'v0.app',
+  title: 'CodeBalance - Plataforma para crear',
+  description: 'CodeBalance ayuda a equipos modernos a crear, desplegar y escalar productos digitales con flujos de trabajo más limpios.',
+  icons: {
+    icon: '/icon.svg',
+    apple: '/apple-icon.png',
+  },
 }
 
 export default function RootLayout({
@@ -32,8 +18,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={`${instrumentSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+    <html lang="es">
+      <body className="font-sans antialiased">
         {children}
         <Analytics />
       </body>

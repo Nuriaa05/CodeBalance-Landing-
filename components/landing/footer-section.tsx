@@ -1,39 +1,30 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { siGmail, siInstagram, siWhatsapp, type SimpleIcon } from "simple-icons";
 import { AnimatedWave } from "./animated-wave";
 
 const footerLinks = {
-  Product: [
-    { name: "Features", href: "#features" },
-    { name: "How it works", href: "#how-it-works" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Integrations", href: "#integrations" },
-  ],
-  Developers: [
-    { name: "Documentation", href: "#developers" },
-    { name: "API Reference", href: "#" },
-    { name: "SDK", href: "#developers" },
-    { name: "Status", href: "#" },
-  ],
-  Company: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Careers", href: "#", badge: "Hiring" },
-    { name: "Contact", href: "#" },
-  ],
-  Legal: [
-    { name: "Privacy", href: "#" },
-    { name: "Terms", href: "#" },
-    { name: "Security", href: "#security" },
+  CodeBalance: [
+    { name: "Servicios", href: "#features" },
+    { name: "Cómo funciona", href: "#how-it-works" },
+    { name: "Integraciones", href: "#integrations" },
+    { name: "Contacto", href: "#contacto" },
   ],
 };
 
 const socialLinks = [
-  { name: "Twitter", href: "#" },
-  { name: "GitHub", href: "#" },
-  { name: "LinkedIn", href: "#" },
+  { name: "Instagram", href: "https://www.instagram.com/codebalance_/", icon: siInstagram },
+  { name: "WhatsApp", href: "https://wa.me/5493625335330", icon: siWhatsapp },
+  { name: "Gmail", href: "mailto:infocodebalance@gmail.com", icon: siGmail },
 ];
+
+function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
+      <path d={icon.path} fill="currentColor" />
+    </svg>
+  );
+}
 
 export function FooterSection() {
   return (
@@ -50,12 +41,11 @@ export function FooterSection() {
             {/* Brand Column */}
             <div className="col-span-2">
               <a href="#" className="inline-flex items-center gap-2 mb-6">
-                <span className="text-2xl font-display">Optimus</span>
-                <span className="text-xs text-muted-foreground font-mono">TM</span>
+                <span className="text-2xl font-display">CodeBalance</span>
               </a>
 
               <p className="text-muted-foreground leading-relaxed mb-8 max-w-xs">
-                The platform for teams who ship. Build, deploy, and scale with unprecedented velocity.
+                La plataforma para equipos que lanzan. Crea, despliega y escala con velocidad excepcional.
               </p>
 
               {/* Social Links */}
@@ -64,10 +54,12 @@ export function FooterSection() {
                   <a
                     key={link.name}
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label={link.name}
+                    target={link.href.startsWith("http") ? "_blank" : undefined}
+                    rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                   >
-                    {link.name}
-                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <SimpleIconLogo icon={link.icon} />
                   </a>
                 ))}
               </div>
@@ -85,11 +77,6 @@ export function FooterSection() {
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
                       >
                         {link.name}
-                        {"badge" in link && link.badge && (
-                          <span className="text-xs px-2 py-0.5 bg-foreground text-background rounded-full">
-                            {link.badge}
-                          </span>
-                        )}
                       </a>
                     </li>
                   ))}
@@ -102,13 +89,13 @@ export function FooterSection() {
         {/* Bottom Bar */}
         <div className="py-8 border-t border-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            2025 Optimus. All rights reserved.
+            2026 CodeBalance. Todos los derechos reservados.
           </p>
 
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500" />
-              All systems operational
+              <span className="w-2 h-2 rounded-full bg-accent" />
+              Todos los sistemas operativos
             </span>
           </div>
         </div>
