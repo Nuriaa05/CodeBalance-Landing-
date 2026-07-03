@@ -4,13 +4,21 @@ import { useEffect, useRef } from "react";
 
 const POINT_CHARS = ".:-=+*#%@";
 const SHAPE_DURATION_MS = 3000;
+const TRANSITION_DURATION_MS = 900;
+const COLLAPSED_SHAPE_SCALE = 0.18;
 const SHAPE_RADIUS_RATIO = 0.525;
+const POLY_EDGE_STEP = 0.02;
+const POLY_GUIDE_STEP = 0.032;
+const TETRA_FACE_STEP = 0.1;
+const CUBE_FACE_STEP = 0.13;
+const RHOMBUS_FACE_STEP = 0.105;
 
 type ShapeName = "sphere" | "tetrahedron" | "cube" | "rhombus";
 type PointWeight = "edge" | "face" | "surface";
 type Point3D = { x: number; y: number; z: number };
 type ModelPoint = Point3D & { weight: PointWeight };
 type DrawPoint = Point3D & { alpha: number; char: string; weight: PointWeight };
+type ShapeLayer = { name: ShapeName; alpha: number; scale: number };
 
 const SHAPE_SEQUENCE: ShapeName[] = ["sphere", "tetrahedron", "cube", "rhombus"];
 const CUBE_COORD = 1 / Math.sqrt(3);
@@ -67,6 +75,17 @@ const cubeEdges = [
   [3, 7],
 ];
 
+const cubeGuideEdges = [
+  [0, 2],
+  [1, 3],
+  [4, 6],
+  [5, 7],
+  [0, 5],
+  [1, 4],
+  [3, 6],
+  [2, 7],
+];
+
 const rhombusEdges = [
   [0, 2],
   [0, 3],
@@ -80,6 +99,12 @@ const rhombusEdges = [
   [4, 3],
   [3, 5],
   [5, 2],
+];
+
+const rhombusGuideEdges = [
+  [0, 1],
+  [2, 3],
+  [4, 5],
 ];
 
 const tetrahedronFaces = [
@@ -110,11 +135,20 @@ const rhombusFaces = [
 ];
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+const easeInOutQuart = (value: number) =>
+  value < 0.5 ? 8 * value ** 4 : 1 - (-2 * value + 2) ** 4 / 2;
+const easeOutQuint = (value: number) => 1 - (1 - value) ** 5;
 
 const mixPoint = (from: Point3D, to: Point3D, amount: number): Point3D => ({
   x: from.x + (to.x - from.x) * amount,
   y: from.y + (to.y - from.y) * amount,
   z: from.z + (to.z - from.z) * amount,
+});
+
+const averagePoint = (points: Point3D[]): Point3D => ({
+  x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+  y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
+  z: points.reduce((sum, point) => sum + point.z, 0) / points.length,
 });
 
 const rotateY = (point: Point3D, angle: number): Point3D => ({
@@ -211,6 +245,18 @@ const addCubeFacePoints = (points: ModelPoint[], step = 0.24) => {
   }
 };
 
+const addTetrahedronGuidePoints = (points: ModelPoint[]) => {
+  const faceCenters = tetrahedronFaces.map((face) =>
+    averagePoint(face.map((vertexIndex) => tetrahedronVertices[vertexIndex])),
+  );
+  const guideVertices = [...tetrahedronVertices, ...faceCenters];
+  const guideEdges = tetrahedronFaces.flatMap((face, faceIndex) =>
+    face.map((vertexIndex) => [vertexIndex, tetrahedronVertices.length + faceIndex]),
+  );
+
+  addEdgePoints(points, guideVertices, guideEdges, POLY_GUIDE_STEP);
+};
+
 const createSpherePoints = (): ModelPoint[] => {
   const points: ModelPoint[] = [];
 
@@ -231,8 +277,9 @@ const createSpherePoints = (): ModelPoint[] => {
 const createTetrahedronPoints = (): ModelPoint[] => {
   const points: ModelPoint[] = [];
 
-  addEdgePoints(points, tetrahedronVertices, tetrahedronEdges, 0.035);
-  addTriangleFacePoints(points, tetrahedronVertices, tetrahedronFaces, 0.17);
+  addEdgePoints(points, tetrahedronVertices, tetrahedronEdges, POLY_EDGE_STEP);
+  addTetrahedronGuidePoints(points);
+  addTriangleFacePoints(points, tetrahedronVertices, tetrahedronFaces, TETRA_FACE_STEP);
 
   return points;
 };
@@ -240,8 +287,9 @@ const createTetrahedronPoints = (): ModelPoint[] => {
 const createCubePoints = (): ModelPoint[] => {
   const points: ModelPoint[] = [];
 
-  addEdgePoints(points, cubeVertices, cubeEdges, 0.035);
-  addCubeFacePoints(points, 0.22);
+  addEdgePoints(points, cubeVertices, cubeEdges, POLY_EDGE_STEP);
+  addEdgePoints(points, cubeVertices, cubeGuideEdges, POLY_GUIDE_STEP);
+  addCubeFacePoints(points, CUBE_FACE_STEP);
 
   return points;
 };
@@ -249,8 +297,9 @@ const createCubePoints = (): ModelPoint[] => {
 const createRhombusPoints = (): ModelPoint[] => {
   const points: ModelPoint[] = [];
 
-  addEdgePoints(points, rhombusVertices, rhombusEdges, 0.035);
-  addTriangleFacePoints(points, rhombusVertices, rhombusFaces, 0.18);
+  addEdgePoints(points, rhombusVertices, rhombusEdges, POLY_EDGE_STEP);
+  addEdgePoints(points, rhombusVertices, rhombusGuideEdges, POLY_GUIDE_STEP);
+  addTriangleFacePoints(points, rhombusVertices, rhombusFaces, RHOMBUS_FACE_STEP);
 
   return points;
 };
@@ -262,12 +311,44 @@ const shapePoints: Record<ShapeName, ModelPoint[]> = {
   rhombus: createRhombusPoints(),
 };
 
-const getShapeLayers = (elapsedMs: number) => {
+const getShapeLayers = (elapsedMs: number): ShapeLayer[] => {
   const totalDuration = SHAPE_DURATION_MS * SHAPE_SEQUENCE.length;
   const loopTime = elapsedMs % totalDuration;
   const shapeIndex = Math.floor(loopTime / SHAPE_DURATION_MS);
+  const shapeTime = loopTime % SHAPE_DURATION_MS;
+  const currentShape = SHAPE_SEQUENCE[shapeIndex];
+  const nextShape = SHAPE_SEQUENCE[(shapeIndex + 1) % SHAPE_SEQUENCE.length];
+  const transitionStart = SHAPE_DURATION_MS - TRANSITION_DURATION_MS;
 
-  return [{ name: SHAPE_SEQUENCE[shapeIndex], alpha: 1 }];
+  if (shapeTime < transitionStart) {
+    return [{ name: currentShape, alpha: 1, scale: 1 }];
+  }
+
+  const transitionProgress = (shapeTime - transitionStart) / TRANSITION_DURATION_MS;
+
+  if (transitionProgress < 0.5) {
+    const collapseProgress = easeInOutQuart(transitionProgress * 2);
+    const scale = 1 - collapseProgress * (1 - COLLAPSED_SHAPE_SCALE);
+
+    return [
+      {
+        name: currentShape,
+        alpha: 1 - collapseProgress * 0.25,
+        scale,
+      },
+    ];
+  }
+
+  const expandProgress = easeOutQuint((transitionProgress - 0.5) * 2);
+  const scale = COLLAPSED_SHAPE_SCALE + expandProgress * (1 - COLLAPSED_SHAPE_SCALE);
+
+  return [
+    {
+      name: nextShape,
+      alpha: 0.72 + expandProgress * 0.28,
+      scale,
+    },
+  ];
 };
 
 export function AnimatedGeometryLoop() {
@@ -310,10 +391,10 @@ export function AnimatedGeometryLoop() {
     };
 
     const getAlpha = (point: ModelPoint, depth: number, layerAlpha: number) => {
-      if (point.weight === "edge") return (0.18 + depth * 0.68) * layerAlpha;
+      if (point.weight === "edge") return Math.min(0.28 + depth * 0.72, 0.96) * layerAlpha;
       if (point.weight === "surface") return (0.2 + depth * 0.8) * layerAlpha;
 
-      return (0.08 + depth * 0.32) * layerAlpha;
+      return (0.12 + depth * 0.44) * layerAlpha;
     };
 
     const render = () => {
@@ -335,7 +416,7 @@ export function AnimatedGeometryLoop() {
         for (const modelPoint of shapePoints[layer.name]) {
           const rotated = rotatePoint(modelPoint, time, layer.name);
           const depth = clamp((rotated.z + 1) / 2, 0, 1);
-          const projected = projectPoint(rotated, centerX, centerY, scale);
+          const projected = projectPoint(rotated, centerX, centerY, scale * layer.scale);
           const charIndex = Math.floor(depth * (POINT_CHARS.length - 1));
 
           points.push({
