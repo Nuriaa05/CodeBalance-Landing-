@@ -4,6 +4,15 @@ import { useEffect, useRef } from "react";
 
 const POINT_CHARS = ".:-=+*#%@";
 type Point3D = { x: number; y: number; z: number };
+type RotationState = { x: number; y: number };
+type DragState = RotationState & {
+  isDragging: boolean;
+  lastX: number;
+  lastY: number;
+  pointerId: number | null;
+  velocityX: number;
+  velocityY: number;
+};
 
 const vertices: Point3D[] = [
   { x: 0, y: 1, z: 0 },
@@ -46,12 +55,28 @@ const rotateZ = (point: Point3D, angle: number): Point3D => ({
   z: point.z,
 });
 
-const rotatePoint = (point: Point3D, time: number) =>
-  rotateZ(rotateX(rotateY(point, time * 0.4), time * 0.3), time * 0.2);
+const rotatePoint = (point: Point3D, time: number, manualRotation: RotationState) =>
+  rotateZ(
+    rotateX(
+      rotateY(point, time * 0.4 + manualRotation.y),
+      time * 0.3 + manualRotation.x,
+    ),
+    time * 0.2,
+  );
 
 export function AnimatedTetrahedron() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef(0);
+  const dragRef = useRef<DragState>({
+    isDragging: false,
+    lastX: 0,
+    lastY: 0,
+    pointerId: null,
+    velocityX: 0,
+    velocityY: 0,
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -65,6 +90,8 @@ export function AnimatedTetrahedron() {
       .getPropertyValue("--navy-main-rgb")
       .trim() || "18, 30, 82";
     let time = 0;
+    const dragSensitivity = 0.008;
+    const dragFriction = 0.92;
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -93,6 +120,20 @@ export function AnimatedTetrahedron() {
       });
     };
 
+    const applyDragMomentum = () => {
+      const drag = dragRef.current;
+
+      if (drag.isDragging) return;
+
+      drag.x += drag.velocityX;
+      drag.y += drag.velocityY;
+      drag.velocityX *= dragFriction;
+      drag.velocityY *= dragFriction;
+
+      if (Math.abs(drag.velocityX) < 0.0001) drag.velocityX = 0;
+      if (Math.abs(drag.velocityY) < 0.0001) drag.velocityY = 0;
+    };
+
     const render = () => {
       const rect = canvas.getBoundingClientRect();
       const centerX = rect.width / 2;
@@ -105,6 +146,7 @@ export function AnimatedTetrahedron() {
       ctx.font = "18px monospace";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+      applyDragMomentum();
 
       for (const [i, j] of edges) {
         const v1 = vertices[i];
@@ -120,6 +162,7 @@ export function AnimatedTetrahedron() {
                 z: v1.z + (v2.z - v1.z) * t,
               },
               time,
+              dragRef.current,
             ),
             centerX,
             centerY,
@@ -146,6 +189,7 @@ export function AnimatedTetrahedron() {
                   z: v1.z * u + v2.z * v + v3.z * w,
                 },
                 time,
+                dragRef.current,
               ),
               centerX,
               centerY,
@@ -170,12 +214,79 @@ export function AnimatedTetrahedron() {
       }
     };
 
+    const renderStaticFrame = () => {
+      if (prefersReducedMotion) render();
+    };
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (event.button !== 0) return;
+
+      const drag = dragRef.current;
+      drag.isDragging = true;
+      drag.lastX = event.clientX;
+      drag.lastY = event.clientY;
+      drag.pointerId = event.pointerId;
+      drag.velocityX = 0;
+      drag.velocityY = 0;
+
+      canvas.setPointerCapture(event.pointerId);
+      canvas.style.cursor = "grabbing";
+      event.preventDefault();
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const drag = dragRef.current;
+
+      if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+      const deltaX = event.clientX - drag.lastX;
+      const deltaY = event.clientY - drag.lastY;
+      const rotationX = deltaY * dragSensitivity;
+      const rotationY = deltaX * dragSensitivity;
+
+      drag.x += rotationX;
+      drag.y += rotationY;
+      drag.velocityX = rotationX;
+      drag.velocityY = rotationY;
+      drag.lastX = event.clientX;
+      drag.lastY = event.clientY;
+
+      renderStaticFrame();
+      event.preventDefault();
+    };
+
+    const handlePointerEnd = (event: PointerEvent) => {
+      const drag = dragRef.current;
+
+      if (drag.pointerId !== event.pointerId) return;
+
+      drag.isDragging = false;
+      drag.pointerId = null;
+
+      if (canvas.hasPointerCapture(event.pointerId)) {
+        canvas.releasePointerCapture(event.pointerId);
+      }
+
+      canvas.style.cursor = "grab";
+      renderStaticFrame();
+    };
+
     resize();
+    canvas.addEventListener("pointerdown", handlePointerDown);
+    canvas.addEventListener("pointermove", handlePointerMove);
+    canvas.addEventListener("pointerup", handlePointerEnd);
+    canvas.addEventListener("pointercancel", handlePointerEnd);
+    canvas.addEventListener("lostpointercapture", handlePointerEnd);
     render();
     window.addEventListener("resize", resize);
 
     return () => {
       window.removeEventListener("resize", resize);
+      canvas.removeEventListener("pointerdown", handlePointerDown);
+      canvas.removeEventListener("pointermove", handlePointerMove);
+      canvas.removeEventListener("pointerup", handlePointerEnd);
+      canvas.removeEventListener("pointercancel", handlePointerEnd);
+      canvas.removeEventListener("lostpointercapture", handlePointerEnd);
       cancelAnimationFrame(frameRef.current);
     };
   }, []);
@@ -185,7 +296,7 @@ export function AnimatedTetrahedron() {
       ref={canvasRef}
       aria-hidden="true"
       className="h-full w-full"
-      style={{ display: "block" }}
+      style={{ cursor: "grab", display: "block", touchAction: "none" }}
     />
   );
 }
