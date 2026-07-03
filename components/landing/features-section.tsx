@@ -749,9 +749,9 @@ export function FeaturesSection() {
             ¿No estás seguro qué necesitás?
           </p>
           <a
-            href={WHATSAPP_BASE_URL}
+            href={whatsappMessageUrl("Hola, quiero contarles sobre mi proyecto.")}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className={OUTLINE_CTA_CLASS}
           >
             Contanos tu proyecto

@@ -68,8 +68,7 @@ export function CtaSection() {
                 </h2>
 
                 <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-xl">
-                  Súmate a miles de equipos que lanzan más rápido con CodeBalance.
-                  Empieza gratis y escala sin límites.
+                  Contanos qué querés lograr y diseñamos una solución digital, financiera o estratégica para hacerlo crecer con claridad.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-start gap-4">
