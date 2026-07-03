@@ -24,32 +24,6 @@ export function HeroSection() {
         <AnimatedSphere />
       </div>
       
-      {/* Subtle grid lines */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={`h-${i}`}
-            className="absolute h-px bg-foreground/10"
-            style={{
-              top: `${12.5 * (i + 1)}%`,
-              left: 0,
-              right: 0,
-            }}
-          />
-        ))}
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={`v-${i}`}
-            className="absolute w-px bg-foreground/10"
-            style={{
-              left: `${8.33 * (i + 1)}%`,
-              top: 0,
-              bottom: 0,
-            }}
-          />
-        ))}
-      </div>
-      
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 py-32 lg:py-40">
         {/* Eyebrow */}
         <div className="mb-8">
