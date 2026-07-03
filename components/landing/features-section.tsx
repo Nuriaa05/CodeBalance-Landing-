@@ -5,6 +5,14 @@ import { ChevronDown } from "lucide-react";
 
 type VisualType = "deploy" | "ai" | "collab" | "security";
 
+const WHATSAPP_BASE_URL = "https://wa.me/5493625335330";
+const OUTLINE_CTA_CLASS =
+  "inline-flex shrink-0 items-center justify-center rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200 hover:bg-[#0f60ec] hover:text-white";
+
+function whatsappMessageUrl(message: string) {
+  return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(message)}`;
+}
+
 const servicePillars = [
   {
     number: "01",
@@ -411,6 +419,16 @@ function ServicePillarCard({
                 </li>
               ))}
             </ul>
+            <div className="mt-5 flex">
+              <a
+                href={whatsappMessageUrl(`Hola, quiero consultar por ${pillar.title}`)}
+                target="_blank"
+                rel="noreferrer"
+                className={OUTLINE_CTA_CLASS}
+              >
+                Consultar por {pillar.title}
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -470,6 +488,20 @@ export function FeaturesSection() {
               onToggle={() => setOpenPillar((current) => (current === pillar.number ? "" : pillar.number))}
             />
           ))}
+        </div>
+
+        <div className="mt-12 flex flex-col items-center gap-5 text-center">
+          <p className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+            ¿No estás seguro qué necesitás?
+          </p>
+          <a
+            href={WHATSAPP_BASE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className={OUTLINE_CTA_CLASS}
+          >
+            Contanos tu proyecto
+          </a>
         </div>
       </div>
     </section>
