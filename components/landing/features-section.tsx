@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-type VisualType = "deploy" | "ai" | "collab" | "security";
+type VisualType = "web" | "deploy" | "ai" | "collab" | "digital";
 
 const WHATSAPP_BASE_URL = "https://wa.me/5493625335330";
 const OUTLINE_CTA_CLASS =
@@ -18,7 +18,7 @@ const servicePillars = [
     number: "01",
     title: "Desarrollo web",
     summary: "Sitios y tiendas pensadas para presentar, vender y convertir con claridad.",
-    visual: "deploy" as VisualType,
+    visual: "web" as VisualType,
     services: [
       {
         name: "Landing page",
@@ -69,7 +69,7 @@ const servicePillars = [
     number: "03",
     title: "Presencia digital",
     summary: "Diseño, integración y SEO para fortalecer cómo se ve y se encuentra tu marca.",
-    visual: "collab" as VisualType,
+    visual: "digital" as VisualType,
     services: [
       {
         name: "Diseño e integración",
@@ -87,7 +87,7 @@ const servicePillars = [
     number: "04",
     title: "Estrategia financiera",
     summary: "Planificación y control para crecer con decisiones basadas en información real.",
-    visual: "security" as VisualType,
+    visual: "deploy" as VisualType,
     services: [
       {
         name: "Estrategia financiera",
@@ -100,7 +100,7 @@ const servicePillars = [
     number: "05",
     title: "Marketing",
     summary: "Estrategias para atraer clientes, mejorar posicionamiento y aumentar conversiones.",
-    visual: "ai" as VisualType,
+    visual: "collab" as VisualType,
     services: [
       {
         name: "Marketing",
@@ -110,6 +110,84 @@ const servicePillars = [
     ],
   },
 ];
+
+function WebDevelopmentVisual() {
+  return (
+    <svg viewBox="0 0 200 160" className="w-full h-full">
+      <style>
+        {`
+          .web-code-line {
+            stroke-dasharray: 72;
+            stroke-dashoffset: 72;
+            animation: webCodeReveal 4.8s ease-in-out infinite;
+          }
+
+          .web-accent-dot {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: webAccentPulse 3.4s ease-in-out infinite;
+          }
+
+          @keyframes webCodeReveal {
+            0%, 18% {
+              stroke-dashoffset: 72;
+              opacity: 0.18;
+            }
+            38%, 72% {
+              stroke-dashoffset: 0;
+              opacity: 0.72;
+            }
+            100% {
+              stroke-dashoffset: 72;
+              opacity: 0.18;
+            }
+          }
+
+          @keyframes webAccentPulse {
+            0%, 100% {
+              opacity: 0.65;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 1;
+              transform: scale(1.18);
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .web-code-line,
+            .web-accent-dot {
+              animation: none;
+            }
+
+            .web-code-line {
+              stroke-dashoffset: 0;
+              opacity: 0.72;
+            }
+          }
+        `}
+      </style>
+
+      <rect x="28" y="24" width="144" height="108" rx="6" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M 28 48 H 172" stroke="currentColor" strokeWidth="2" opacity="0.18" />
+
+      <circle cx="42" cy="36" r="2.6" fill="currentColor" opacity="0.28" />
+      <circle cx="54" cy="36" r="2.6" fill="currentColor" opacity="0.22" />
+      <circle cx="66" cy="36" r="2.6" fill="currentColor" opacity="0.18" />
+      <circle className="web-accent-dot" cx="154" cy="36" r="3" fill="#0f60ec" />
+
+      <rect x="44" y="62" width="48" height="42" rx="4" fill="var(--background)" opacity="0.55" />
+      <path d="M 66 90 L 54 80 L 66 70" fill="none" stroke="#0f60ec" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M 86 70 L 74 90" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+      <path d="M 86 70 L 98 80 L 86 90" fill="none" stroke="#0f60ec" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
+
+      <path className="web-code-line" d="M 112 66 H 154" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path className="web-code-line" d="M 112 80 H 142" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ animationDelay: "0.25s" }} />
+      <path className="web-code-line" d="M 112 94 H 160" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ animationDelay: "0.5s" }} />
+      <path className="web-code-line" d="M 112 108 H 132" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" style={{ animationDelay: "0.75s" }} />
+    </svg>
+  );
+}
 
 function DeployVisual() {
   return (
@@ -269,62 +347,122 @@ function CollabVisual() {
   );
 }
 
-function SecurityVisual() {
+function DigitalPresenceVisual() {
   return (
     <svg viewBox="0 0 200 160" className="w-full h-full">
-      {/* Shield */}
+      <style>
+        {`
+          .digital-growth-line {
+            stroke-dasharray: 190;
+            stroke-dashoffset: 190;
+            animation: digitalGrowthDraw 4.8s ease-in-out infinite;
+          }
+
+          .digital-growth-arrow {
+            stroke-dasharray: 42;
+            stroke-dashoffset: 42;
+            animation: digitalGrowthDraw 4.8s ease-in-out infinite;
+          }
+
+          .digital-growth-tip {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: digitalTipPulse 4.8s ease-in-out infinite;
+          }
+
+          @keyframes digitalGrowthDraw {
+            0%, 14% {
+              stroke-dashoffset: 190;
+              opacity: 0.2;
+            }
+            48%, 78% {
+              stroke-dashoffset: 0;
+              opacity: 1;
+            }
+            100% {
+              stroke-dashoffset: 0;
+              opacity: 0.78;
+            }
+          }
+
+          @keyframes digitalTipPulse {
+            0%, 48%, 100% {
+              opacity: 0.58;
+              transform: scale(1);
+            }
+            64% {
+              opacity: 0.95;
+              transform: scale(1.18);
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .digital-growth-line,
+            .digital-growth-arrow,
+            .digital-growth-tip {
+              animation: none;
+            }
+
+            .digital-growth-line,
+            .digital-growth-arrow {
+              stroke-dashoffset: 0;
+              opacity: 1;
+            }
+          }
+        `}
+      </style>
+
       <path
-        d="M 100 20 L 150 40 L 150 90 Q 150 130 100 145 Q 50 130 50 90 L 50 40 Z"
+        d="M 40 116 L 72 94 L 98 102 L 128 70 L 158 44"
         fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
+        stroke="var(--background)"
+        strokeWidth="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.36"
       />
-      
-      {/* Inner shield */}
       <path
-        d="M 100 35 L 135 50 L 135 85 Q 135 115 100 128 Q 65 115 65 85 L 65 50 Z"
-        fill="currentColor"
-        opacity="0.1"
-      >
-        <animate attributeName="opacity" values="0.1;0.2;0.1" dur="2s" repeatCount="indefinite" />
-      </path>
-      
-      {/* Lock icon */}
-      <rect x="85" y="70" width="30" height="25" rx="3" fill="currentColor" />
-      <path
-        d="M 90 70 L 90 60 Q 90 50 100 50 Q 110 50 110 60 L 110 70"
+        className="digital-growth-line"
+        d="M 40 116 L 72 94 L 98 102 L 128 70 L 158 44"
         fill="none"
         stroke="currentColor"
         strokeWidth="3"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      
-      {/* Keyhole */}
-      <circle cx="100" cy="80" r="4" fill="var(--background)" />
-      <rect x="98" y="82" width="4" height="8" fill="var(--background)" />
-      
-      {/* Scan lines */}
-      <line x1="60" y1="60" x2="140" y2="60" stroke="currentColor" strokeWidth="1" opacity="0">
-        <animate attributeName="y1" values="40;120;40" dur="3s" repeatCount="indefinite" />
-        <animate attributeName="y2" values="40;120;40" dur="3s" repeatCount="indefinite" />
-        <animate attributeName="opacity" values="0;0.5;0" dur="3s" repeatCount="indefinite" />
-      </line>
+      <path
+        className="digital-growth-arrow"
+        d="M 158 44 L 154 66 M 158 44 L 136 48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ animationDelay: "0.45s" }}
+      />
+
+      <circle cx="72" cy="94" r="4" fill="var(--background)" stroke="currentColor" strokeWidth="1.5" opacity="0.55" />
+      <circle cx="98" cy="102" r="3.5" fill="var(--background)" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
+      <circle cx="128" cy="70" r="3.5" fill="var(--background)" stroke="currentColor" strokeWidth="1.5" opacity="0.45" />
+      <circle className="digital-growth-tip" cx="158" cy="44" r="4" fill="#0f60ec" opacity="0.75" />
     </svg>
   );
 }
 
 function AnimatedVisual({ type }: { type: VisualType }) {
   switch (type) {
+    case "web":
+      return <WebDevelopmentVisual />;
     case "deploy":
       return <DeployVisual />;
     case "ai":
       return <AIVisual />;
     case "collab":
       return <CollabVisual />;
-    case "security":
-      return <SecurityVisual />;
+    case "digital":
+      return <DigitalPresenceVisual />;
     default:
-      return <DeployVisual />;
+      return <WebDevelopmentVisual />;
   }
 }
 
@@ -341,6 +479,7 @@ function ServicePillarCard({
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
   const contentId = `service-pillar-${pillar.number}`;
 
   useEffect(() => {
@@ -355,11 +494,39 @@ function ServicePillarCard({
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let scrollTimer: number | undefined;
+    const frameId = window.requestAnimationFrame(() => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      scrollTimer = window.setTimeout(
+        () => {
+          detailsRef.current?.scrollIntoView({
+            behavior: prefersReducedMotion ? "auto" : "smooth",
+            block: "start",
+          });
+        },
+        prefersReducedMotion ? 0 : 120
+      );
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      if (scrollTimer) window.clearTimeout(scrollTimer);
+    };
+  }, [isOpen]);
+
   return (
     <div
       ref={cardRef}
-      className={`group relative border border-foreground/10 bg-card/45 transition-[border-color,opacity,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-accent/40 ${
+      className={`group relative border transition-[border-color,background-color,box-shadow,opacity,transform] hover:border-accent/40 motion-reduce:transition-none ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+      } ${
+        isOpen
+          ? "border-[#0f60ec]/30 bg-card/60 shadow-[0_18px_55px_rgba(18,30,82,0.08)] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+          : "border-foreground/10 bg-card/45 shadow-none duration-[220ms] ease-[cubic-bezier(0.4,0,1,1)]"
       }`}
       style={{ transitionDelay: isVisible ? "0ms" : `${index * 70}ms` }}
     >
@@ -373,7 +540,7 @@ function ServicePillarCard({
         <span className="font-mono text-sm text-muted-foreground">{pillar.number}</span>
 
         <span className="min-w-0">
-          <span className="block text-2xl font-display leading-tight tracking-tight transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1 sm:text-3xl lg:text-4xl">
+          <span className="block text-2xl font-display leading-tight tracking-tight transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 motion-reduce:transition-none sm:text-3xl lg:text-4xl">
             {pillar.title}
           </span>
           <span className="mt-2 block max-w-2xl font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
@@ -382,15 +549,27 @@ function ServicePillarCard({
         </span>
 
         <span
-          className="flex h-14 w-16 items-center justify-end text-foreground sm:h-24 sm:w-32 lg:h-28 lg:w-40"
+          className={`flex h-14 w-16 items-center justify-end text-foreground transition-[opacity,transform] motion-reduce:transition-none sm:h-24 sm:w-32 lg:h-28 lg:w-40 ${
+            isOpen
+              ? "scale-[1.02] opacity-100 duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+              : "scale-100 opacity-90 duration-[220ms] ease-[cubic-bezier(0.4,0,1,1)]"
+          }`}
           aria-hidden="true"
         >
           <AnimatedVisual type={pillar.visual} />
         </span>
 
-        <span className="flex h-10 w-10 items-center justify-center border border-foreground/10 bg-background/55 text-foreground transition-colors duration-150 ease-out group-hover:bg-foreground group-hover:text-background">
+        <span
+          className={`flex h-10 w-10 items-center justify-center border bg-background/55 text-foreground transition-[background-color,border-color,color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:bg-foreground group-hover:text-background ${
+            isOpen ? "border-[#0f60ec]/35 shadow-[0_10px_26px_rgba(18,30,82,0.08)]" : "border-foreground/10"
+          }`}
+        >
           <ChevronDown
-            className={`h-5 w-5 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ${isOpen ? "rotate-180" : ""}`}
+            className={`h-5 w-5 transition-transform motion-reduce:transition-none ${
+              isOpen
+                ? "rotate-180 duration-[260ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                : "duration-[220ms] ease-[cubic-bezier(0.4,0,1,1)]"
+            }`}
             aria-hidden="true"
           />
         </span>
@@ -398,36 +577,47 @@ function ServicePillarCard({
 
       <div
         id={contentId}
-        className={`grid overflow-hidden transition-[grid-template-rows] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
-          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        className={`grid overflow-hidden transition-[grid-template-rows] motion-reduce:transition-none ${
+          isOpen
+            ? "grid-rows-[1fr] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+            : "grid-rows-[0fr] duration-[220ms] ease-[cubic-bezier(0.4,0,1,1)]"
         }`}
       >
-        <div className="min-h-0 px-5 pb-6 sm:px-8 lg:pb-8">
-          <div className="border-t border-foreground/10 pt-6">
-            <ul>
-              {pillar.services.map((service) => (
-                <li
-                  key={service.name}
-                  className="grid grid-cols-[150px_minmax(0,1fr)] gap-5 border-b border-foreground/10 py-3.5 last:border-b-0"
+        <div className="min-h-0 overflow-hidden">
+          <div
+            ref={detailsRef}
+            className={`scroll-mt-[120px] px-5 pb-6 transition-[opacity,transform] motion-reduce:transition-none sm:px-8 lg:scroll-mt-[136px] lg:pb-8 ${
+              isOpen
+                ? "translate-y-0 opacity-100 delay-75 duration-[240ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+                : "translate-y-3 opacity-0 delay-0 duration-[180ms] ease-[cubic-bezier(0.4,0,1,1)]"
+            }`}
+          >
+            <div className="border-t border-foreground/10 pt-6">
+              <ul>
+                {pillar.services.map((service) => (
+                  <li
+                    key={service.name}
+                    className="grid grid-cols-[150px_minmax(0,1fr)] gap-5 border-b border-foreground/10 py-3.5 last:border-b-0"
+                  >
+                    <h3 className="font-sans text-[13px] font-medium leading-relaxed text-foreground/80 sm:text-sm">
+                      {service.name}
+                    </h3>
+                    <p className="font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
+                      {service.description}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-5 flex">
+                <a
+                  href={whatsappMessageUrl(`Hola, quiero consultar por ${pillar.title}`)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={OUTLINE_CTA_CLASS}
                 >
-                  <h3 className="font-sans text-[13px] font-medium leading-relaxed text-foreground/80 sm:text-sm">
-                    {service.name}
-                  </h3>
-                  <p className="font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
-                    {service.description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-5 flex">
-              <a
-                href={whatsappMessageUrl(`Hola, quiero consultar por ${pillar.title}`)}
-                target="_blank"
-                rel="noreferrer"
-                className={OUTLINE_CTA_CLASS}
-              >
-                Consultar por {pillar.title}
-              </a>
+                  Consultar por {pillar.title}
+                </a>
+              </div>
             </div>
           </div>
         </div>
