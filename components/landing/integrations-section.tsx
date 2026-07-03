@@ -171,16 +171,16 @@ export function IntegrationsSection() {
         >
           <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground mb-6">
             <span className="w-8 h-px bg-foreground/30" />
-            Integraciones
+            Tecnologías
             <span className="w-8 h-px bg-foreground/30" />
           </span>
           <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-6">
-            Funciona con todo
+            La tecnología correcta
             <br />
-            lo que ya usas.
+            Para cada proyecto
           </h2>
           <p className="text-xl text-muted-foreground">
-            Más de 200 integraciones listas para usar. Conecta todo tu stack en minutos.
+            Elegimos el stack que mejor se adapta a cada uno, priorizando rendimiento y escalabilidad.
           </p>
         </div>
 

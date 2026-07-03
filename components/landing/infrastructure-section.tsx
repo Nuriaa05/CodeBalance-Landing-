@@ -3,13 +3,42 @@
 import { useEffect, useState, useRef } from "react";
 
 const locations = [
-  { city: "San Francisco", region: "Oeste de EE. UU.", latency: "12ms" },
-  { city: "Nueva York", region: "Este de EE. UU.", latency: "18ms" },
-  { city: "Londres", region: "Europa", latency: "24ms" },
-  { city: "Tokio", region: "Asia Pacífico", latency: "32ms" },
-  { city: "Sídney", region: "Oceanía", latency: "45ms" },
-  { city: "São Paulo", region: "Sudamérica", latency: "38ms" },
+  {
+    city: "NR Fundas Personalizadas",
+    region: "E-commerce · En producción",
+    status: "production",
+    link: "#",
+  },
+  {
+    city: "Chaco Implantes",
+    region: "Sitio institucional · En producción",
+    status: "production",
+    link: "#",
+  },
+  {
+    city: "Neutron Tecnología SAS",
+    region: "Plataforma e-commerce · En desarrollo",
+    status: "development",
+    link: "#",
+  },
+  {
+    city: "Landing médica — completar nombre",
+    region: "Salud · En producción",
+    status: "production",
+    link: "#",
+  },
 ];
+
+const statusDotStyles = {
+  production: {
+    active: "bg-accent",
+    idle: "bg-accent/55",
+  },
+  development: {
+    active: "bg-[#b9923c]",
+    idle: "bg-[#b9923c]/55",
+  },
+};
 
 export function InfrastructureSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -47,31 +76,31 @@ export function InfrastructureSection() {
           >
             <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground mb-6">
               <span className="w-8 h-px bg-foreground/30" />
-              Infraestructura
+              Casos de éxito
             </span>
             <h2 className="text-4xl lg:text-6xl font-display tracking-tight mb-8">
-              Global por
+              Proyectos reales.
               <br />
-              defecto.
+              <span className="text-muted-foreground">Resultados medibles.</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed mb-12">
-              Despliega una vez y ejecuta en todas partes. Nuestra red edge cubre 17 centros de datos
-              en 6 continentes, con latencia menor a 50 ms para el 99% del mundo.
+              Cada proyecto es distinto, pero todos comparten lo mismo: una solución pensada de punta a punta,
+              del diseño a la puesta en producción.
             </p>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8">
               <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">17</div>
-                <div className="text-sm text-muted-foreground">Centros de datos</div>
+                <div className="text-4xl lg:text-5xl font-display mb-2">5+</div>
+                <div className="text-sm text-muted-foreground">Proyectos entregados</div>
               </div>
               <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">99.99%</div>
-                <div className="text-sm text-muted-foreground">SLA de disponibilidad</div>
+                <div className="text-4xl lg:text-5xl font-display mb-2">3</div>
+                <div className="text-sm text-muted-foreground">Industrias distintas</div>
               </div>
               <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">&lt;50ms</div>
-                <div className="text-sm text-muted-foreground">Latencia global</div>
+                <div className="text-4xl lg:text-5xl font-display mb-2">100%</div>
+                <div className="text-sm text-muted-foreground">A medida</div>
               </div>
             </div>
           </div>
@@ -85,26 +114,30 @@ export function InfrastructureSection() {
             <div className="border border-foreground/10">
               {/* Header */}
               <div className="px-6 py-4 border-b border-foreground/10 flex items-center justify-between">
-                <span className="text-sm font-mono text-muted-foreground">Red edge</span>
+                <span className="text-sm font-mono text-muted-foreground">Nuestros proyectos</span>
                 <span className="flex items-center gap-2 text-xs font-mono text-accent">
                   <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                  Todo operativo
+                  3 en producción
                 </span>
               </div>
 
               {/* Locations */}
               <div>
-                {locations.map((location, index) => (
+                {locations.map((location, index) => {
+                  const statusClass = statusDotStyles[location.status as keyof typeof statusDotStyles];
+                  const isActive = activeLocation === index;
+
+                  return (
                   <div
                     key={location.city}
                     className={`px-6 py-5 border-b border-foreground/5 last:border-b-0 flex items-center justify-between transition-all duration-300 ${
-                      activeLocation === index ? "bg-accent/10" : ""
+                      isActive ? "bg-accent/10" : ""
                     }`}
                   >
                     <div className="flex items-center gap-4">
                       <span 
                         className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                          activeLocation === index ? "bg-foreground" : "bg-foreground/20"
+                          isActive ? statusClass.active : statusClass.idle
                         }`}
                       />
                       <div>
@@ -112,9 +145,21 @@ export function InfrastructureSection() {
                         <div className="text-sm text-muted-foreground">{location.region}</div>
                       </div>
                     </div>
-                    <span className="font-mono text-sm text-muted-foreground">{location.latency}</span>
+                    {isActive ? (
+                      <a
+                        href={location.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="shrink-0 rounded-full border border-foreground/10 px-4 py-2 text-xs font-medium text-foreground transition-colors duration-200 hover:bg-foreground hover:text-background"
+                      >
+                        Ver caso
+                      </a>
+                    ) : (
+                      <span className="w-[72px]" aria-hidden="true" />
+                    )}
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

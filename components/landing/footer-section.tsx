@@ -7,7 +7,7 @@ const footerLinks = {
   CodeBalance: [
     { name: "Servicios", href: "#features" },
     { name: "Cómo funciona", href: "#how-it-works" },
-    { name: "Integraciones", href: "#integrations" },
+    { name: "Tecnologías", href: "#integrations" },
     { name: "Contacto", href: "#contacto" },
   ],
 };

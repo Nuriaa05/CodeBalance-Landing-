@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { siWhatsapp, type SimpleIcon } from "simple-icons";
@@ -8,9 +8,14 @@ import { siWhatsapp, type SimpleIcon } from "simple-icons";
 const WHATSAPP_URL = "https://wa.me/5493625335330";
 
 const navLinks = [
+  { name: "Inicio", href: "#inicio" },
   { name: "Servicios", href: "#features" },
-  { name: "Cómo funciona", href: "#how-it-works" },
+  { name: "Cómo trabajamos", href: "#how-it-works" },
+  { name: "Casos de éxito", href: "#infraestructura" },
+  { name: "Tecnologías", href: "#integrations" },
+  { name: "Seguridad", href: "#security" },
   { name: "Nosotros", href: "#developers" },
+  { name: "Testimonios", href: "#testimonios" },
   { name: "Contacto", href: "#contacto" },
 ];
 
@@ -25,13 +30,76 @@ function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState(navLinks[0].href);
+  const lockedHrefRef = useRef<string | null>(null);
+
+  const activateLink = (href: string) => {
+    lockedHrefRef.current = href;
+    setActiveHref(href);
+  };
 
   useEffect(() => {
-    const handleScroll = () => {
+    let frameId: number | null = null;
+
+    const updateNavigationState = () => {
       setIsScrolled(window.scrollY > 20);
+
+      if (lockedHrefRef.current) {
+        const lockedSection = document.getElementById(lockedHrefRef.current.slice(1));
+        const isAtDocumentEnd =
+          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+        const isLockedSectionReached =
+          !lockedSection || Math.abs(lockedSection.getBoundingClientRect().top) <= 120;
+
+        if (isLockedSectionReached || isAtDocumentEnd) {
+          lockedHrefRef.current = null;
+        } else {
+          setActiveHref(lockedHrefRef.current);
+          return;
+        }
+      }
+
+      const marker = window.scrollY + Math.min(window.innerHeight * 0.35, 320);
+      let currentHref = navLinks[0].href;
+
+      for (const link of navLinks) {
+        const section = document.getElementById(link.href.slice(1));
+        if (section && section.offsetTop <= marker) {
+          currentHref = link.href;
+        }
+      }
+
+      setActiveHref(currentHref);
     };
+
+    const handleScroll = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(() => {
+        updateNavigationState();
+        frameId = null;
+      });
+    };
+
+    const handleHashChange = () => {
+      const matchingLink = navLinks.find((link) => link.href === window.location.hash);
+      if (matchingLink) {
+        lockedHrefRef.current = matchingLink.href;
+        setActiveHref(matchingLink.href);
+      }
+    };
+
+    updateNavigationState();
+    handleHashChange();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("hashchange", handleHashChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -68,7 +136,7 @@ export function Navigation() {
           }`}
         >
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group">
+          <a href="#inicio" onClick={() => activateLink("#inicio")} className="flex items-center gap-2 group">
             <span className={`font-display tracking-tight transition-all duration-500 ${isScrolled ? "text-xl" : "text-2xl"}`}>
               <span style={{ color: "#555865" }}>Code</span>
               <span style={{ color: "#0f60ec" }}>Balance</span>
@@ -76,21 +144,33 @@ export function Navigation() {
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-12">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm text-foreground/70 hover:text-foreground transition-colors duration-300 relative group"
-              >
-                {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-full" />
-              </a>
-            ))}
+          <div className="hidden xl:flex items-center gap-4 2xl:gap-5">
+            {navLinks.map((link) => {
+              const isActive = activeHref === link.href;
+
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  aria-current={isActive ? "location" : undefined}
+                  onClick={() => activateLink(link.href)}
+                  className={`text-xs 2xl:text-sm transition-colors duration-300 relative group whitespace-nowrap ${
+                    isActive ? "text-foreground" : "text-foreground/70 hover:text-foreground"
+                  }`}
+                >
+                  {link.name}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-px bg-foreground transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </a>
+              );
+            })}
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden xl:flex items-center gap-4">
             <Button
               asChild
               size="sm"
@@ -106,7 +186,7 @@ export function Navigation() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 transition-transform duration-150 ease-out active:scale-95"
+            className="xl:hidden p-2 transition-transform duration-150 ease-out active:scale-95"
             aria-label={isMobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-navigation"
@@ -127,7 +207,7 @@ export function Navigation() {
         id="mobile-navigation"
         aria-hidden={!isMobileMenuOpen}
         inert={!isMobileMenuOpen}
-        className={`md:hidden fixed inset-0 bg-background z-40 transition-all duration-500 ${
+        className={`xl:hidden fixed inset-0 bg-background z-40 transition-all duration-500 ${
           isMobileMenuOpen 
             ? "opacity-100 pointer-events-auto" 
             : "opacity-0 pointer-events-none"
@@ -136,22 +216,32 @@ export function Navigation() {
       >
         <div className="flex flex-col h-full px-8 pt-28 pb-8">
           {/* Navigation Links */}
-          <div className="flex-1 flex flex-col justify-center gap-8">
-            {navLinks.map((link, i) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-display text-foreground hover:text-muted-foreground transition-all duration-500 ${
-                  isMobileMenuOpen 
-                    ? "opacity-100 translate-y-0" 
-                    : "opacity-0 translate-y-4"
-                }`}
-                style={{ transitionDelay: isMobileMenuOpen ? `${i * 75}ms` : "0ms" }}
-              >
-                {link.name}
-              </a>
-            ))}
+          <div className="flex-1 flex flex-col justify-center gap-5 sm:gap-7">
+            {navLinks.map((link, i) => {
+              const isActive = activeHref === link.href;
+
+              return (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  aria-current={isActive ? "location" : undefined}
+                  onClick={() => {
+                    activateLink(link.href);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-4xl sm:text-5xl font-display transition-all duration-500 ${
+                    isActive ? "text-foreground" : "text-foreground/60 hover:text-foreground"
+                  } ${
+                    isMobileMenuOpen
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
+                  }`}
+                  style={{ transitionDelay: isMobileMenuOpen ? `${i * 75}ms` : "0ms" }}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
           </div>
           
           {/* Bottom CTAs */}
