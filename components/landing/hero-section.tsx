@@ -102,7 +102,7 @@ export function HeroSection() {
             <Button 
               asChild
               size="lg" 
-              className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group"
+              className="bg-[#0f60ec] hover:bg-[#0f60ec] text-white px-8 h-14 text-base rounded-full group"
             >
               <a href="#contacto">
                 Contactanos

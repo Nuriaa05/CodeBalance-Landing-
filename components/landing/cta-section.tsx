@@ -76,7 +76,7 @@ export function CtaSection() {
                   <Button
                     asChild
                     size="lg"
-                    className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group"
+                    className="bg-[#0f60ec] hover:bg-[#0f60ec] text-white px-8 h-14 text-base rounded-full group"
                   >
                     <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
                       <SimpleIconLogo icon={siWhatsapp} />
@@ -87,7 +87,7 @@ export function CtaSection() {
               </div>
 
               {/* Right animation */}
-              <div className="hidden lg:flex items-center justify-center w-[500px] h-[500px] -mr-16">
+              <div className="hidden aspect-square min-w-[360px] max-w-[520px] flex-1 items-center justify-center overflow-visible lg:flex">
                 <AnimatedTetrahedron />
               </div>
             </div>

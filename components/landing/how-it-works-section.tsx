@@ -144,7 +144,7 @@ export function HowItWorksSection() {
                     {activeStep === index && (
                       <div className="mt-4 h-px bg-background/20 overflow-hidden">
                         <div 
-                          className="h-full bg-background w-0"
+                          className="h-full bg-[#0f60ec] w-0"
                           style={{
                             animation: 'progress 5s linear forwards'
                           }}

@@ -97,7 +97,8 @@ export function AnimatedTetrahedron() {
       const rect = canvas.getBoundingClientRect();
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const scale = Math.min(rect.width, rect.height) * 0.7;
+      const safeSize = Math.min(rect.width, rect.height);
+      const scale = safeSize * 0.42;
       const points: { x: number; y: number; z: number; char: string }[] = [];
 
       ctx.clearRect(0, 0, rect.width, rect.height);

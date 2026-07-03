@@ -160,7 +160,7 @@ export function Navigation() {
                 >
                   {link.name}
                   <span
-                    className={`absolute -bottom-1 left-0 h-px bg-foreground transition-all duration-300 ${
+                    className={`absolute -bottom-1 left-0 h-px bg-[#0f60ec] transition-all duration-300 ${
                       isActive ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -174,7 +174,7 @@ export function Navigation() {
             <Button
               asChild
               size="sm"
-              className={`bg-foreground hover:bg-foreground/90 text-background rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
+              className={`bg-[#0f60ec] hover:bg-[#0f60ec] text-white rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
             >
               <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
                 <SimpleIconLogo icon={siWhatsapp} />
@@ -254,7 +254,7 @@ export function Navigation() {
           >
             <Button 
               asChild
-              className="flex-1 bg-foreground text-background rounded-full h-14 text-base"
+              className="flex-1 bg-[#0f60ec] text-white rounded-full h-14 text-base"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">

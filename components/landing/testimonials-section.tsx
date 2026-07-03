@@ -126,7 +126,7 @@ export function TestimonialsSection() {
                   }}
                   className={`h-2 transition-all duration-300 ${
                     idx === activeIndex
-                      ? "w-8 bg-foreground"
+                      ? "w-8 bg-[#0f60ec]"
                       : "w-2 bg-foreground/20 hover:bg-foreground/40"
                   }`}
                 />
