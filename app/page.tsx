@@ -9,6 +9,7 @@ import { DevelopersSection } from "@/components/landing/developers-section";
 import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { CtaSection } from "@/components/landing/cta-section";
 import { FooterSection } from "@/components/landing/footer-section";
+import { FloatingWhatsAppButton } from "@/components/landing/floating-whatsapp-button";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <TestimonialsSection />
       <CtaSection />
       <FooterSection />
+      <FloatingWhatsAppButton />
     </main>
   );
 }

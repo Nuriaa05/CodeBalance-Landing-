@@ -2,17 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { createWhatsAppUrl } from "./whatsapp";
 
 type VisualType = "web" | "deploy" | "ai" | "collab" | "digital";
 
-const WHATSAPP_BASE_URL = "https://wa.me/5493625335330";
 const OUTLINE_CTA_CLASS =
   "inline-flex shrink-0 items-center justify-center rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200 hover:bg-[#0f60ec] hover:text-white";
 const SERVICE_OUTLINE_CTA_CLASS = `${OUTLINE_CTA_CLASS} max-md:active:border-[#0f60ec] max-md:active:bg-[rgba(15,96,236,0.08)] max-md:active:text-[#0f60ec]`;
 const SERVICE_SCROLL_DELAY_MS = 420;
 
 function whatsappMessageUrl(message: string) {
-  return `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(message)}`;
+  return createWhatsAppUrl(message);
 }
 
 const servicePillars = [
@@ -451,18 +451,17 @@ function AnimatedVisual({ type }: { type: VisualType }) {
 
 function ServicePillarCard({
   pillar,
-  index,
   isOpen,
   onToggle,
   registerCardRef,
 }: {
   pillar: typeof servicePillars[0];
-  index: number;
   isOpen: boolean;
   onToggle: () => void;
   registerCardRef: (number: string, node: HTMLDivElement | null) => void;
 }) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
+  const [entranceComplete, setEntranceComplete] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const contentId = `service-pillar-${pillar.number}`;
 
@@ -475,28 +474,58 @@ function ServicePillarCard({
   );
 
   useEffect(() => {
+    const currentCard = cardRef.current;
+
+    if (!currentCard) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = window.requestAnimationFrame(() => setHasEntered(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
+        if (!entry.isIntersecting) return;
+
+        setHasEntered(true);
+        observer.unobserve(entry.target);
       },
-      { threshold: 0.2 }
+      {
+        rootMargin: "0px 0px -12% 0px",
+        threshold: 0.15,
+      }
     );
 
-    if (cardRef.current) observer.observe(cardRef.current);
+    observer.observe(currentCard);
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (!hasEntered) return;
+
+    const timeout = window.setTimeout(() => {
+      setEntranceComplete(true);
+    }, 560);
+
+    return () => window.clearTimeout(timeout);
+  }, [hasEntered]);
 
   return (
     <div
       ref={setCardNode}
-      className={`group relative scroll-mt-[104px] border transition-[border-color,background-color,box-shadow,opacity,transform] hover:border-accent/40 motion-reduce:transition-none md:scroll-mt-[120px] ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+      className={`group relative scroll-mt-[104px] border hover:border-accent/40 motion-safe:transition-[border-color,background-color,box-shadow,opacity,translate,transform] motion-reduce:translate-x-0 motion-reduce:opacity-100 motion-reduce:transition-none md:scroll-mt-[120px] ${
+        hasEntered ? "translate-x-0 opacity-100" : "-translate-x-6 opacity-0"
+      } ${
+        entranceComplete
+          ? isOpen
+            ? "motion-safe:duration-[400ms] motion-safe:ease-[cubic-bezier(0.16,1,0.3,1)]"
+            : "motion-safe:duration-[220ms] motion-safe:ease-[cubic-bezier(0.4,0,1,1)]"
+          : "motion-safe:duration-[560ms] motion-safe:ease-out"
       } ${
         isOpen
-          ? "border-[#0f60ec]/30 bg-card/60 shadow-[0_18px_55px_rgba(18,30,82,0.08)] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-          : "border-foreground/10 bg-card/45 shadow-none duration-[220ms] ease-[cubic-bezier(0.4,0,1,1)]"
+          ? "border-[#0f60ec]/30 bg-card/60 shadow-[0_18px_55px_rgba(18,30,82,0.08)]"
+          : "border-foreground/10 bg-card/45 shadow-none"
       }`}
-      style={{ transitionDelay: isVisible ? "0ms" : `${index * 70}ms` }}
     >
       <button
         type="button"
@@ -595,8 +624,11 @@ function ServicePillarCard({
 
 export function FeaturesSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [finalCtaHasEntered, setFinalCtaHasEntered] = useState(false);
+  const [finalCtaEntranceComplete, setFinalCtaEntranceComplete] = useState(false);
   const [openPillar, setOpenPillar] = useState("");
   const sectionRef = useRef<HTMLDivElement>(null);
+  const finalCtaRef = useRef<HTMLDivElement>(null);
   const serviceRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const scrollTimeoutRef = useRef<number | undefined>(undefined);
   const scrollFrameRef = useRef<number | undefined>(undefined);
@@ -685,6 +717,43 @@ export function FeaturesSection() {
   }, []);
 
   useEffect(() => {
+    const finalCta = finalCtaRef.current;
+
+    if (!finalCta) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = window.requestAnimationFrame(() => setFinalCtaHasEntered(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setFinalCtaHasEntered(true);
+        observer.unobserve(entry.target);
+      },
+      {
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(finalCta);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!finalCtaHasEntered) return;
+
+    const timeout = window.setTimeout(() => {
+      setFinalCtaEntranceComplete(true);
+    }, 700);
+
+    return () => window.clearTimeout(timeout);
+  }, [finalCtaHasEntered]);
+
+  useEffect(() => {
     return () => clearPendingServiceScroll();
   }, [clearPendingServiceScroll]);
 
@@ -714,11 +783,10 @@ export function FeaturesSection() {
 
         {/* Services List */}
         <div className="grid gap-4">
-          {servicePillars.map((pillar, index) => (
+          {servicePillars.map((pillar) => (
             <ServicePillarCard
               key={pillar.number}
               pillar={pillar}
-              index={index}
               isOpen={openPillar === pillar.number}
               onToggle={() => handlePillarToggle(pillar.number)}
               registerCardRef={registerServiceRef}
@@ -726,15 +794,25 @@ export function FeaturesSection() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-col items-center gap-5 text-center">
-          <p className="font-display text-2xl tracking-tight text-foreground sm:text-3xl">
+        <div ref={finalCtaRef} className="mt-12 flex flex-col items-center gap-5 text-center">
+          <p
+            className={`font-display text-2xl tracking-tight text-foreground motion-safe:transition-[opacity,translate] motion-safe:duration-500 motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 sm:text-3xl ${
+              finalCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+            }`}
+          >
             ¿No estás seguro qué necesitás?
           </p>
           <a
             href={whatsappMessageUrl("Hola, quiero contarles sobre mi proyecto.")}
             target="_blank"
             rel="noopener noreferrer"
-            className={OUTLINE_CTA_CLASS}
+            className={`${OUTLINE_CTA_CLASS} motion-safe:transition-[background-color,border-color,color,opacity,translate] motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+              finalCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+            } ${
+              finalCtaHasEntered && !finalCtaEntranceComplete ? "motion-safe:delay-200" : "motion-safe:delay-0"
+            } ${
+              finalCtaEntranceComplete ? "motion-safe:duration-200" : "motion-safe:duration-500"
+            }`}
           >
             Contanos tu proyecto
           </a>

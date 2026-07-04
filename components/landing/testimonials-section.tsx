@@ -3,33 +3,41 @@
 import { useEffect, useState } from "react";
 
 const testimonials = [
+  // TODO: pendiente de confirmación del cliente
   {
-    quote: "CodeBalance transformó nuestro pipeline de despliegue. Lo que antes llevaba horas ahora ocurre en segundos.",
-    author: "Sarah Chen",
-    role: "CTO",
-    company: "Meridian Labs",
-    metric: "Despliegues 10x más rápidos",
+    quote: "Con CodeBalance mejoramos muchísimo nuestra presencia digital. Se nota en cómo nos encuentran los clientes ahora.",
+    author: "Gustavo González",
+    role: "Dueño",
+    company: "Neutron Tecnología SAS",
+    avatar: "G",
+    metric: "Mayor presencia digital",
   },
+  // TODO: pendiente de confirmación del cliente
   {
-    quote: "La experiencia para desarrolladores es excelente. La productividad del equipo nunca estuvo tan alta.",
-    author: "Marcus Webb",
-    role: "Líder de Ingeniería",
-    company: "Flux Systems",
-    metric: "40% más funcionalidades lanzadas",
+    quote: "La web transmite exactamente la seriedad que buscaba para mi consultorio",
+    author: "Dr. Masedo Carlos Dante",
+    role: "Cirujano",
+    company: "Dr. Masedo Carlos Dante",
+    avatar: "M",
+    metric: "Más consultas agendadas desde la web",
   },
+  // TODO: pendiente de confirmación del cliente
   {
-    quote: "Por fin tenemos infraestructura que escala con nuestra ambición. Cero caídas desde la migración.",
-    author: "Elena Rodriguez",
-    role: "VP de Ingeniería",
-    company: "Beacon AI",
-    metric: "99.99% de disponibilidad",
+    quote: "El sistema nos simplificó la gestión de stock. Lo que antes llevaba varios pasos, ahora es mucho más directo.",
+    author: "Mario González",
+    role: "Dueño",
+    company: "Mag Tecnología",
+    avatar: "M",
+    metric: "Gestión de stock más ágil",
   },
+  // TODO: pendiente de confirmación del cliente
   {
-    quote: "Las integraciones son fluidas. Conectamos todo el stack en una sola tarde.",
-    author: "James Liu",
-    role: "Fundador",
-    company: "Prism Analytics",
-    metric: "Más de 50 integraciones usadas",
+    quote: "Nos entendieron perfecto lo que necesitábamos para el día a día del local. El sistema nos hizo la vida mucho más simple.",
+    author: "Ivonne Vignudo",
+    role: "Dueña",
+    company: "Lozano Congelados",
+    avatar: "I",
+    metric: "Menos tiempo perdido en tareas manuales",
   },
 ];
 
@@ -85,7 +93,7 @@ export function TestimonialsSection() {
             >
               <div className="w-16 h-16 rounded-full bg-card/70 border border-foreground/10 flex items-center justify-center">
                 <span className="font-display text-2xl text-foreground">
-                  {activeTestimonial.author.charAt(0)}
+                  {activeTestimonial.avatar}
                 </span>
               </div>
               <div>

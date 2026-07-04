@@ -2,6 +2,7 @@
 
 import { siGmail, siInstagram, siWhatsapp, type SimpleIcon } from "simple-icons";
 import { AnimatedWave } from "./animated-wave";
+import { WHATSAPP_URL } from "./whatsapp";
 
 const footerLinks = {
   CodeBalance: [
@@ -19,7 +20,7 @@ const footerLinks = {
 
 const socialLinks = [
   { name: "Instagram", href: "https://www.instagram.com/codebalance_/", icon: siInstagram },
-  { name: "WhatsApp", href: "https://wa.me/5493625335330", icon: siWhatsapp },
+  { name: "WhatsApp", href: WHATSAPP_URL, icon: siWhatsapp },
   { name: "Gmail", href: "mailto:infocodebalance@gmail.com", icon: siGmail },
 ];
 

@@ -14,11 +14,11 @@ type ProjectLinkKey =
 const projectLinks: Record<ProjectLinkKey, string | null> = {
   // TODO: agregar link real cuando esté disponible.
   stockAdmin: null,
-  medicalLanding: null,
+  medicalLanding: "https://drmasedo.com/",
   chacoImplantes: null,
   ecommerceBackend: null,
   lozanoManagement: null,
-  neutronMarketing: null,
+  neutronMarketing: "https://www.instagram.com/nraccesoriosok/",
 };
 
 const projects: Array<{
@@ -29,18 +29,25 @@ const projects: Array<{
   href: string | null;
 }> = [
   {
-    id: "stockAdmin",
-    name: "Sistema administrativo de stock",
-    category: "Sistema de gestión · En producción",
-    status: "production",
-    href: projectLinks.stockAdmin,
-  },
-  {
     id: "medicalLanding",
     name: "Landing médica profesional",
     category: "Sitio institucional · En producción",
     status: "production",
     href: projectLinks.medicalLanding,
+  },
+  {
+    id: "neutronMarketing",
+    name: "Neutron Tecnología SAS",
+    category: "Marketing y presencia digital · En producción",
+    status: "production",
+    href: projectLinks.neutronMarketing,
+  },
+  {
+    id: "stockAdmin",
+    name: "Sistema administrativo de stock",
+    category: "Sistema de gestión · En producción",
+    status: "production",
+    href: projectLinks.stockAdmin,
   },
   {
     id: "chacoImplantes",
@@ -63,19 +70,12 @@ const projects: Array<{
     status: "development",
     href: projectLinks.lozanoManagement,
   },
-  {
-    id: "neutronMarketing",
-    name: "Neutron Tecnología SAS",
-    category: "Marketing y presencia digital · En producción",
-    status: "production",
-    href: projectLinks.neutronMarketing,
-  },
 ];
 
 const statusDotStyles = {
   production: {
-    active: "bg-accent",
-    idle: "bg-accent/55",
+    active: "bg-[#22C55E]",
+    idle: "bg-[#22C55E]/60",
   },
   development: {
     active: "bg-[#b9923c]",
@@ -83,16 +83,17 @@ const statusDotStyles = {
   },
 };
 
-function ProjectCaseButton({ href }: { href: string | null }) {
+function ProjectCaseButton({ href, status }: { href: string | null; status: ProjectStatus }) {
   const buttonClassName =
     "shrink-0 rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200";
 
+  if (status === "development") {
+    return null;
+  }
+
   if (!href) {
     return (
-      <span
-        aria-disabled="true"
-        className={`${buttonClassName} cursor-not-allowed opacity-45`}
-      >
+      <span aria-disabled="true" className={buttonClassName}>
         Ver caso
       </span>
     );
@@ -215,7 +216,7 @@ export function InfrastructureSection() {
                         <div className="text-sm text-muted-foreground">{project.category}</div>
                       </div>
                     </div>
-                    <ProjectCaseButton href={project.href} />
+                    <ProjectCaseButton href={project.href} status={project.status} />
                   </div>
                   );
                 })}

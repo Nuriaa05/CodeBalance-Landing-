@@ -2,10 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { siWhatsapp, type SimpleIcon } from "simple-icons";
 import { AnimatedTetrahedron } from "./animated-tetrahedron";
-
-const WHATSAPP_URL = "https://wa.me/5493625335330";
+import { WHATSAPP_CONTACT_URL, WhatsAppIcon } from "./whatsapp";
 
 const CTA_TEXTURE_SYMBOLS = [
   { symbol: "+", x: 13, y: 11, size: 18, opacity: 0.06 },
@@ -19,14 +17,6 @@ const CTA_TEXTURE_SYMBOLS = [
   { symbol: "+", x: 82, y: 84, size: 17, opacity: 0.06 },
   { symbol: "=", x: 33, y: 88, size: 15, opacity: 0.05 },
 ] as const;
-
-function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-      <path d={icon.path} fill="currentColor" />
-    </svg>
-  );
-}
 
 export function CtaSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -111,8 +101,8 @@ export function CtaSection() {
                     size="lg"
                     className="bg-[#0f60ec] hover:bg-[#0f60ec] text-white px-8 h-14 text-base rounded-full group"
                   >
-                    <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-                      <SimpleIconLogo icon={siWhatsapp} />
+                    <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noreferrer">
+                      <WhatsAppIcon />
                       Contactanos
                     </a>
                   </Button>

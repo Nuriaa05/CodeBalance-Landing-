@@ -3,9 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { siWhatsapp, type SimpleIcon } from "simple-icons";
-
-const WHATSAPP_URL = "https://wa.me/5493625335330";
+import { WHATSAPP_CONTACT_URL, WhatsAppIcon } from "./whatsapp";
 
 const navLinks = [
   { name: "Inicio", href: "#inicio" },
@@ -18,14 +16,6 @@ const navLinks = [
   { name: "Testimonios", href: "#testimonios" },
   { name: "Contacto", href: "#contacto" },
 ];
-
-function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true">
-      <path d={icon.path} fill="currentColor" />
-    </svg>
-  );
-}
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -176,8 +166,8 @@ export function Navigation() {
               size="sm"
               className={`bg-[#0f60ec] hover:bg-[#0f60ec] text-white rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
             >
-              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-                <SimpleIconLogo icon={siWhatsapp} />
+              <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noreferrer">
+                <WhatsAppIcon />
                 Contactanos
               </a>
             </Button>
@@ -257,8 +247,8 @@ export function Navigation() {
               className="flex-1 bg-[#0f60ec] text-white rounded-full h-14 text-base"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-                <SimpleIconLogo icon={siWhatsapp} />
+              <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noreferrer">
+                <WhatsAppIcon />
                 Contactanos
               </a>
             </Button>
