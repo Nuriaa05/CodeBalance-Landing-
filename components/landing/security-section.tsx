@@ -7,7 +7,7 @@ const securityFeatures = [
   {
     icon: Shield,
     title: "Hosting confiable",
-    description: "Desplegamos en plataformas reconocidas (Vercel, Netlify, AWS) con HTTPS por defecto y monitoreo de disponibilidad.",
+    description: "Desplegamos en plataformas reconocidas con HTTPS por defecto y monitoreo de disponibilidad.",
   },
   {
     icon: Lock,
@@ -64,11 +64,11 @@ export function SecuritySection() {
               innegociable.
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed mb-12">
-              No vendemos humo: trabajamos con buenas prácticas de desarrollo, hosting confiable y respeto por la información de tu negocio y tus clientes en cada proyecto que entregamos.
+              Respeto por la información de tu negocio y tus clientes en cada proyecto que entregamos.
             </p>
 
             {/* Certifications */}
-            <div className="flex flex-wrap gap-3">
+            <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
               {certifications.map((cert, index) => (
                 <span
                   key={cert}
@@ -88,7 +88,7 @@ export function SecuritySection() {
             {securityFeatures.map((feature, index) => (
               <div
                 key={feature.title}
-                className={`p-6 border border-foreground/10 bg-background/45 hover:border-accent/40 transition-all duration-500 group ${
+                className={`border border-l-[3px] border-foreground/10 border-l-[#0f60ec] bg-background/45 px-6 py-5 transition-all duration-500 hover:border-accent/40 hover:border-l-[#0f60ec] group sm:p-6 lg:border-l lg:border-l-foreground/10 lg:hover:border-l-accent/40 ${
                   isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}

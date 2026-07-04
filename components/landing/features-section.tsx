@@ -94,7 +94,8 @@ const servicePillars = [
       {
         name: "Estrategia financiera",
         description:
-          "Diseñamos estrategias para optimizar la rentabilidad, ordenar las finanzas, mejorar el control del negocio y crecer con planificación: precios, presupuestos, rentabilidad, proyecciones y planificación estratégica.",
+          "Transformamos los números en decisiones. Diseñamos estrategias que optimizan la rentabilidad, mejoran el control del negocio y permiten crecer con planificación y seguridad.\n\n" +
+          "Ayudamos a empresas y emprendedores a ordenar sus finanzas para tomar decisiones con información real. Generación de herramientas de control, determinación de precios, presupuestos, análisis de rentabilidad, proyecciones financieras y planificación estratégica que impulsan un crecimiento sostenible.",
       },
     ],
   },
@@ -107,7 +108,7 @@ const servicePillars = [
       {
         name: "Marketing",
         description:
-          "Diseñamos estrategias para optimizar la rentabilidad, ordenar las finanzas, mejorar el control del negocio y crecer con planificación: precios, presupuestos, rentabilidad, proyecciones y planificación estratégica. Manejo impositivo de monotributibutistas y responsables inscriptos -persona física-.",
+          "Impulsamos el crecimiento de tu marca mediante estrategias de marketing orientadas a resultados. Combinamos creatividad, análisis y publicidad digital para atraer clientes, fortalecer tu posicionamiento y aumentar las conversiones.",
       },
     ],
   },
@@ -598,7 +599,7 @@ function ServicePillarCard({
                     <h3 className="font-sans text-[13px] font-medium leading-relaxed text-foreground/80 sm:text-sm">
                       {service.name}
                     </h3>
-                    <p className="font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
+                    <p className="whitespace-pre-line font-sans text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
                       {service.description}
                     </p>
                   </li>
