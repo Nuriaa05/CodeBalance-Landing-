@@ -351,102 +351,83 @@ function CollabVisual() {
 
 function DigitalPresenceVisual() {
   return (
-    <svg viewBox="0 0 200 160" className="w-full h-full">
+    <svg viewBox="0 0 64 64" className="h-full w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
       <style>
         {`
-          .digital-growth-line {
-            stroke-dasharray: 190;
-            stroke-dashoffset: 190;
-            animation: digitalGrowthDraw 4.8s ease-in-out infinite;
+          .pd-trend {
+            stroke-dasharray: 120;
+            stroke-dashoffset: 120;
+            animation: pd-draw 2.4s ease-in-out infinite;
           }
 
-          .digital-growth-arrow {
-            stroke-dasharray: 42;
-            stroke-dashoffset: 42;
-            animation: digitalGrowthDraw 4.8s ease-in-out infinite;
+          .pd-bar {
+            transform-box: fill-box;
+            transform-origin: bottom;
+            animation: pd-grow 2.4s ease-in-out infinite;
           }
 
-          .digital-growth-tip {
+          .pd-bar1 { animation-delay: 0s; }
+          .pd-bar2 { animation-delay: .08s; }
+          .pd-bar3 { animation-delay: .16s; }
+          .pd-bar4 { animation-delay: .24s; }
+          .pd-bar5 { animation-delay: .32s; }
+
+          .pd-dot {
             transform-box: fill-box;
             transform-origin: center;
-            animation: digitalTipPulse 4.8s ease-in-out infinite;
+            animation: pd-pulse 2.4s ease-in-out infinite;
           }
 
-          @keyframes digitalGrowthDraw {
-            0%, 14% {
-              stroke-dashoffset: 190;
-              opacity: 0.2;
-            }
-            48%, 78% {
-              stroke-dashoffset: 0;
-              opacity: 1;
-            }
-            100% {
-              stroke-dashoffset: 0;
-              opacity: 0.78;
-            }
+          @keyframes pd-draw {
+            0% { stroke-dashoffset: 120; }
+            60%, 100% { stroke-dashoffset: 0; }
           }
 
-          @keyframes digitalTipPulse {
-            0%, 48%, 100% {
-              opacity: 0.58;
-              transform: scale(1);
-            }
-            64% {
-              opacity: 0.95;
-              transform: scale(1.18);
-            }
+          @keyframes pd-grow {
+            0%, 15% { transform: scaleY(0); }
+            100% { transform: scaleY(1); }
+          }
+
+          @keyframes pd-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.6); }
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .digital-growth-line,
-            .digital-growth-arrow,
-            .digital-growth-tip {
+            .pd-trend,
+            .pd-bar,
+            .pd-dot {
               animation: none;
             }
 
-            .digital-growth-line,
-            .digital-growth-arrow {
+            .pd-trend {
               stroke-dashoffset: 0;
-              opacity: 1;
+            }
+
+            .pd-bar,
+            .pd-dot {
+              transform: none;
             }
           }
         `}
       </style>
 
+      <path d="M10 10V54H54" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
+      <rect className="pd-bar pd-bar1" x="16" y="42" width="5" height="9" rx="1" fill="currentColor" opacity="0.55" />
+      <rect className="pd-bar pd-bar2" x="24" y="36" width="5" height="15" rx="1" fill="currentColor" opacity="0.65" />
+      <rect className="pd-bar pd-bar3" x="32" y="30" width="5" height="21" rx="1" fill="currentColor" opacity="0.75" />
+      <rect className="pd-bar pd-bar4" x="40" y="34" width="5" height="17" rx="1" fill="currentColor" opacity="0.65" />
+      <rect className="pd-bar pd-bar5" x="48" y="24" width="5" height="27" rx="1" fill="currentColor" opacity="0.85" />
       <path
-        d="M 40 116 L 72 94 L 98 102 L 128 70 L 158 44"
-        fill="none"
-        stroke="var(--background)"
-        strokeWidth="10"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.36"
-      />
-      <path
-        className="digital-growth-line"
-        d="M 40 116 L 72 94 L 98 102 L 128 70 L 158 44"
-        fill="none"
+        className="pd-trend"
+        d="M15 40L26 28L34 33L52 14"
         stroke="currentColor"
-        strokeWidth="3"
+        strokeWidth={1.8}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
-        className="digital-growth-arrow"
-        d="M 158 44 L 154 66 M 158 44 L 136 48"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        style={{ animationDelay: "0.45s" }}
-      />
-
-      <circle cx="72" cy="94" r="4" fill="var(--background)" stroke="currentColor" strokeWidth="1.5" opacity="0.55" />
-      <circle cx="98" cy="102" r="3.5" fill="var(--background)" stroke="currentColor" strokeWidth="1.5" opacity="0.4" />
-      <circle cx="128" cy="70" r="3.5" fill="var(--background)" stroke="currentColor" strokeWidth="1.5" opacity="0.45" />
-      <circle className="digital-growth-tip" cx="158" cy="44" r="4" fill="#0f60ec" opacity="0.75" />
+      <path d="M45 14H52V21" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+      <circle className="pd-dot" cx="52" cy="14" r="2" fill="currentColor" />
     </svg>
   );
 }
