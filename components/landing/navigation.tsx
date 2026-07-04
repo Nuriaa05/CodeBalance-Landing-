@@ -216,7 +216,7 @@ export function Navigation() {
       >
         <div className="flex flex-col h-full px-8 pt-28 pb-8">
           {/* Navigation Links */}
-          <div className="flex-1 flex flex-col justify-center gap-5 sm:gap-7">
+          <div className="flex-1 flex flex-col justify-center gap-3 sm:gap-3.5">
             {navLinks.map((link, i) => {
               const isActive = activeHref === link.href;
 
@@ -229,8 +229,8 @@ export function Navigation() {
                     activateLink(link.href);
                     setIsMobileMenuOpen(false);
                   }}
-                  className={`text-4xl sm:text-5xl font-display transition-all duration-500 ${
-                    isActive ? "text-foreground" : "text-foreground/60 hover:text-foreground"
+                  className={`font-sans text-[23px] font-medium leading-tight transition-all duration-500 sm:text-2xl ${
+                    isActive ? "text-[#0f60ec]" : "text-foreground/60 hover:text-foreground/80"
                   } ${
                     isMobileMenuOpen
                       ? "opacity-100 translate-y-0"

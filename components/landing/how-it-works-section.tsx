@@ -118,22 +118,22 @@ export function HowItWorksSection() {
         </div>
 
         {/* Main content */}
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-24">
           {/* Steps */}
-          <div className="space-y-0">
+          <div className="w-full space-y-0">
             {steps.map((step, index) => (
               <button
                 key={step.number}
                 type="button"
                 onClick={() => setActiveStep(index)}
-                className={`w-full text-left py-8 border-b border-background/10 transition-all duration-500 group ${
-                  activeStep === index ? "opacity-100" : "opacity-40 hover:opacity-70"
+                className={`w-full border-b border-background/10 py-6 text-left transition-all duration-500 group lg:py-8 ${
+                  activeStep === index ? "opacity-100" : "opacity-75 hover:opacity-90 lg:opacity-40 lg:hover:opacity-70"
                 }`}
               >
-                <div className="flex items-start gap-6">
+                <div className="flex items-start gap-4 sm:gap-6">
                   <span className="font-display text-3xl text-background/30">{step.number}</span>
                   <div className="flex-1">
-                    <h3 className="text-2xl lg:text-3xl font-display mb-3 group-hover:translate-x-2 transition-transform duration-300">
+                    <h3 className="mb-2 font-display text-2xl transition-transform duration-300 group-hover:translate-x-2 lg:mb-3 lg:text-3xl">
                       {step.title}
                     </h3>
                     <p className="text-background/60 leading-relaxed">
@@ -158,7 +158,7 @@ export function HowItWorksSection() {
           </div>
 
           {/* Code display */}
-          <div className="lg:sticky lg:top-32 self-start">
+          <div className="hidden self-start lg:sticky lg:top-32 lg:block">
             <div className="border border-background/10 overflow-hidden">
               {/* Window header */}
               <div className="px-6 py-4 border-b border-background/10 flex items-center justify-between">

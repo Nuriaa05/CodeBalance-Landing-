@@ -34,12 +34,12 @@ export function DevelopersSection() {
   }, []);
 
   return (
-    <section id="developers" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="developers" ref={sectionRef} className="relative overflow-hidden pt-20 pb-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-24 lg:items-center">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-24 lg:items-center">
           {/* Left: Image */}
           <div
-            className={`relative max-w-xl transition-all duration-700 ${
+            className={`relative order-2 max-w-xl transition-all duration-700 lg:order-none ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
@@ -62,21 +62,21 @@ export function DevelopersSection() {
 
           {/* Right: Content */}
           <div
-            className={`transition-all duration-700 delay-100 ${
+            className={`contents transition-all duration-700 delay-100 lg:block ${
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground mb-6">
+            <span className="order-1 inline-flex items-center gap-3 text-sm font-mono text-muted-foreground lg:mb-6 lg:order-none">
               <span className="w-8 h-px bg-foreground/30" />
               Sobre nosotros
             </span>
-            <h2 className="text-4xl lg:text-[2.5rem] font-display tracking-tight mb-8">
+            <h2 className="order-3 text-4xl lg:text-[2.5rem] font-display tracking-tight lg:mb-8 lg:order-none">
               Dos disciplinas.
               <br />
               <span className="text-muted-foreground">Una sola visión de negocio.</span>
             </h2>
 
-            <div className="max-w-[680px]">
+            <div className="order-4 max-w-[680px] lg:order-none">
               {aboutParagraphs.map((paragraph) => (
                 <p
                   key={paragraph}
