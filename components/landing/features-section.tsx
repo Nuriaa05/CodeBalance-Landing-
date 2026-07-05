@@ -355,80 +355,99 @@ function DigitalPresenceVisual() {
     <svg viewBox="0 0 64 64" className="h-full w-full" fill="none" xmlns="http://www.w3.org/2000/svg">
       <style>
         {`
-          .pd-trend {
-            stroke-dasharray: 120;
-            stroke-dashoffset: 120;
-            animation: pd-draw 2.4s ease-in-out infinite;
-          }
-
           .pd-bar {
             transform-box: fill-box;
-            transform-origin: bottom;
+            transform-origin: center bottom;
             animation: pd-grow 2.4s ease-in-out infinite;
+          }
+
+          .pd-arrow {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: pd-lift 2.4s ease-in-out infinite;
           }
 
           .pd-bar1 { animation-delay: 0s; }
           .pd-bar2 { animation-delay: .08s; }
           .pd-bar3 { animation-delay: .16s; }
           .pd-bar4 { animation-delay: .24s; }
-          .pd-bar5 { animation-delay: .32s; }
-
-          .pd-dot {
-            transform-box: fill-box;
-            transform-origin: center;
-            animation: pd-pulse 2.4s ease-in-out infinite;
-          }
-
-          @keyframes pd-draw {
-            0% { stroke-dashoffset: 120; }
-            60%, 100% { stroke-dashoffset: 0; }
-          }
 
           @keyframes pd-grow {
-            0%, 15% { transform: scaleY(0); }
-            100% { transform: scaleY(1); }
+            0%, 15% {
+              opacity: 0.24;
+              transform: scaleY(0.32);
+            }
+
+            60%, 100% {
+              opacity: 0.82;
+              transform: scaleY(1);
+            }
           }
 
-          @keyframes pd-pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.6); }
+          @keyframes pd-lift {
+            0%, 15% {
+              opacity: 0.28;
+              transform: translate(-0.35px, 0.35px) scale(0.96);
+            }
+
+            60%, 100% {
+              opacity: 0.72;
+              transform: translate(0, 0) scale(1);
+            }
           }
 
           @media (prefers-reduced-motion: reduce) {
-            .pd-trend,
             .pd-bar,
-            .pd-dot {
+            .pd-arrow {
               animation: none;
             }
 
-            .pd-trend {
-              stroke-dashoffset: 0;
-            }
-
             .pd-bar,
-            .pd-dot {
+            .pd-arrow {
               transform: none;
             }
           }
         `}
       </style>
 
-      <path d="M10 10V54H54" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
-      <rect className="pd-bar pd-bar1" x="16" y="42" width="5" height="9" rx="1" fill="currentColor" opacity="0.55" />
-      <rect className="pd-bar pd-bar2" x="24" y="36" width="5" height="15" rx="1" fill="currentColor" opacity="0.65" />
-      <rect className="pd-bar pd-bar3" x="32" y="30" width="5" height="21" rx="1" fill="currentColor" opacity="0.75" />
-      <rect className="pd-bar pd-bar4" x="40" y="34" width="5" height="17" rx="1" fill="currentColor" opacity="0.65" />
-      <rect className="pd-bar pd-bar5" x="48" y="24" width="5" height="27" rx="1" fill="currentColor" opacity="0.85" />
-      <path
-        className="pd-trend"
-        d="M15 40L26 28L34 33L52 14"
-        stroke="currentColor"
-        strokeWidth={1.8}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M45 14H52V21" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
-      <circle className="pd-dot" cx="52" cy="14" r="2" fill="currentColor" />
+      <g transform="translate(8 8) scale(3)">
+        <path
+          d="M 1 0.5 V 15.5 H 15.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.55"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity="0.45"
+        />
+
+        {[
+          { x: 3, y: 14, height: 1, delay: "0s" },
+          { x: 6, y: 12, height: 3, delay: ".08s" },
+          { x: 9, y: 9, height: 6, delay: ".16s" },
+          { x: 12, y: 6, height: 9, delay: ".24s" },
+        ].map((bar) => (
+          <rect
+            key={bar.x}
+            className="pd-bar"
+            x={bar.x}
+            y={bar.y}
+            width="2"
+            height={bar.height}
+            rx="0.5"
+            fill="currentColor"
+            opacity="0.28"
+            style={{ animationDelay: bar.delay }}
+          />
+        ))}
+
+        <path
+          className="pd-arrow"
+          d="M 2.146 11.854 A 0.5 0.5 0 0 1 2.146 11.146 L 12.293 1 H 10.5 A 0.5 0.5 0 0 1 10.5 0 H 13.5 A 0.5 0.5 0 0 1 14 0.5 V 3.5 A 0.5 0.5 0 0 1 13 3.5 V 1.707 L 2.854 11.854 A 0.5 0.5 0 0 1 2.146 11.854 Z"
+          fill="currentColor"
+          opacity="0.72"
+        />
+      </g>
     </svg>
   );
 }
