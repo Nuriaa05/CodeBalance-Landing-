@@ -59,7 +59,7 @@ export function TestimonialsSection() {
   const activeTestimonial = testimonials[activeIndex];
 
   return (
-    <section id="testimonios" className="relative py-32 lg:py-40 border-t border-foreground/10 lg:pb-14">
+    <section id="testimonios" className="relative border-t border-foreground/10 bg-[#f4f6fa] py-32 lg:py-40 lg:pb-14">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Label */}
         <div className="flex items-center gap-4 mb-16">

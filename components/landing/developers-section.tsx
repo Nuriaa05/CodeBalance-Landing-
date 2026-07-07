@@ -34,7 +34,7 @@ export function DevelopersSection() {
   }, []);
 
   return (
-    <section id="developers" ref={sectionRef} className="relative overflow-hidden pt-20 pb-24 lg:py-32">
+    <section id="developers" ref={sectionRef} className="relative overflow-hidden bg-[#ffffff] pt-20 pb-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-24 lg:items-center">
           {/* Left: Image */}

@@ -136,7 +136,7 @@ export function InfrastructureSection() {
   }, []);
 
   return (
-    <section id="infraestructura" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="infraestructura" ref={sectionRef} className="relative overflow-hidden bg-[#eaf1fd] py-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left: Content */}

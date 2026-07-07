@@ -44,7 +44,7 @@ export function CtaSection() {
   };
 
   return (
-    <section id="contacto" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="contacto" ref={sectionRef} className="relative overflow-hidden bg-[#ffffff] py-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         <div
           className={`relative border border-foreground/20 bg-card/60 shadow-[0_32px_90px_rgba(18,30,82,0.10)] transition-all duration-1000 max-lg:border-t-2 max-lg:border-t-[#0f60ec] ${

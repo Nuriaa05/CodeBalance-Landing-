@@ -161,7 +161,7 @@ export function IntegrationsSection() {
   }, []);
 
   return (
-    <section id="integrations" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
+    <section id="integrations" ref={sectionRef} className="relative overflow-hidden bg-[#ffffff] py-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
         <div

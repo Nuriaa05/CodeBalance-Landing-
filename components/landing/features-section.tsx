@@ -781,7 +781,7 @@ export function FeaturesSection() {
     <section
       id="features"
       ref={sectionRef}
-      className="relative py-24 lg:py-32"
+      className="relative bg-[#f4f6fa] py-24 lg:py-32"
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
@@ -795,7 +795,7 @@ export function FeaturesSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            Todo lo que tu negocio necesita.
+            Todo lo que necesitás.
             <br />
             <span className="text-muted-foreground">En un solo lugar.</span>
           </h2>
