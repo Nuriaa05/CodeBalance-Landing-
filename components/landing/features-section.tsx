@@ -781,7 +781,7 @@ export function FeaturesSection() {
     <section
       id="features"
       ref={sectionRef}
-      className="relative bg-[#f4f6fa] py-24 lg:py-32"
+      className="relative py-24 lg:py-32"
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
