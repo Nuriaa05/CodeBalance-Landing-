@@ -795,9 +795,9 @@ export function FeaturesSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            Todo lo necesario.
+            Todo lo que tu negocio necesita.
             <br />
-            <span className="text-muted-foreground">Nada de más.</span>
+            <span className="text-muted-foreground">En un solo lugar.</span>
           </h2>
         </div>
 
