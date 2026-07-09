@@ -29,7 +29,7 @@ export function HeroSection() {
         <div className="mb-8">
           <span className="inline-flex items-center gap-3 text-sm font-mono text-muted-foreground">
             <span className="w-8 h-px bg-foreground/30" />
-            La plataforma para equipos modernos
+            Desarrollo · Marketing · Finanzas
           </span>
         </div>
         

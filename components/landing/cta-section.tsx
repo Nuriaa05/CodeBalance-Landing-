@@ -86,7 +86,7 @@ export function CtaSection() {
                 </span>
 
                 <h2 className="text-4xl lg:text-7xl font-display tracking-tight mb-8 leading-[0.95]">
-                  Listo para crear
+                  ¿Listo para crear
                   <br />
                   algo grande?
                 </h2>

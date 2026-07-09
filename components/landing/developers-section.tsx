@@ -50,7 +50,7 @@ export function DevelopersSection() {
               />
               <div className="relative z-10 aspect-[4/5] overflow-hidden rounded-2xl border border-foreground/10 bg-card/60">
                 <Image
-                  src="/about-team.png"
+                  src="/about-team.webp"
                   alt="Equipo de CodeBalance"
                   fill
                   sizes="(min-width: 1024px) 42vw, 100vw"
