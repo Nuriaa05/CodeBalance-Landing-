@@ -73,10 +73,10 @@ export function TestimonialsSection() {
         </div>
 
         {/* Main Quote */}
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          <div className="lg:col-span-8">
+        <div className="grid items-stretch gap-12 lg:grid-cols-12 lg:gap-20">
+          <div className="flex flex-col lg:col-span-8">
             <blockquote
-              className={`transition-all duration-300 ${
+              className={`flex h-[340px] items-start transition-all duration-300 sm:h-[300px] md:h-[280px] lg:h-[340px] xl:h-[280px] ${
                 isAnimating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
               }`}
             >
@@ -87,7 +87,7 @@ export function TestimonialsSection() {
 
             {/* Author */}
             <div
-              className={`mt-12 flex items-center gap-6 transition-all duration-300 delay-100 ${
+              className={`mt-12 flex min-h-24 items-center gap-6 transition-all duration-300 delay-100 ${
                 isAnimating ? "opacity-0" : "opacity-100"
               }`}
             >
@@ -106,9 +106,9 @@ export function TestimonialsSection() {
           </div>
 
           {/* Metric Highlight */}
-          <div className="lg:col-span-4 flex flex-col justify-center">
+          <div className="flex flex-col justify-center lg:col-span-4">
             <div
-              className={`p-8 border border-foreground/10 bg-card/55 transition-all duration-300 ${
+              className={`flex h-[180px] flex-col justify-center border border-foreground/10 bg-card/55 p-8 transition-all duration-300 md:h-[190px] lg:h-[220px] ${
                 isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
               }`}
             >
