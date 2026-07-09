@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { OUTLINE_CTA_CLASS } from "./cta-styles";
+import { createWhatsAppUrl } from "./whatsapp";
 
 type ProjectStatus = "production" | "development";
 type ProjectLinkKey =
@@ -154,25 +156,27 @@ export function InfrastructureSection() {
               <br />
               <span className="text-muted-foreground">Resultados medibles.</span>
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-12">
+            <p className="text-xl text-muted-foreground leading-relaxed mb-5">
               Cada proyecto es distinto, pero todos comparten lo mismo: una solución pensada de punta a punta,
               del diseño a la puesta en producción.
             </p>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8">
-              <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">5+</div>
-                <div className="text-sm text-muted-foreground">Proyectos entregados</div>
-              </div>
-              <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">3</div>
-                <div className="text-sm text-muted-foreground">Industrias distintas</div>
-              </div>
-              <div>
-                <div className="text-4xl lg:text-5xl font-display mb-2">100%</div>
-                <div className="text-sm text-muted-foreground">A medida</div>
-              </div>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Estos son algunos de los proyectos en los que estamos trabajando hoy.
+            </p>
+
+            <div className="mt-8 flex flex-col items-start gap-4">
+              <p className="font-display text-2xl tracking-tight text-foreground">
+                ¿Tenés un proyecto en mente?
+              </p>
+              <a
+                href={createWhatsAppUrl("Hola, quiero contarles sobre mi proyecto.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={OUTLINE_CTA_CLASS}
+              >
+                Contanos tu proyecto
+              </a>
             </div>
           </div>
 
