@@ -93,7 +93,8 @@ const servicePillars = [
         name: "Estrategia financiera",
         description:
           "Transformamos los números en decisiones. Diseñamos estrategias que optimizan la rentabilidad, mejoran el control del negocio y permiten crecer con planificación y seguridad.\n\n" +
-          "Ayudamos a empresas y emprendedores a ordenar sus finanzas para tomar decisiones con información real. Generación de herramientas de control, determinación de precios, presupuestos, análisis de rentabilidad, proyecciones financieras y planificación estratégica que impulsan un crecimiento sostenible.",
+          "Ayudamos a empresas y emprendedores a ordenar sus finanzas para tomar decisiones con información real. Generación de herramientas de control, determinación de precios, presupuestos, análisis de rentabilidad, proyecciones financieras y planificación estratégica que impulsan un crecimiento sostenible.\n\n" +
+          "Manejo impositivo de monotributibutistas y responsables inscriptos -persona física-.",
       },
     ],
   },

@@ -47,7 +47,10 @@ export function FooterSection() {
             {/* Brand Column */}
             <div className="col-span-2">
               <a href="#inicio" className="inline-flex items-center gap-2 mb-6">
-                <span className="text-2xl font-display">CodeBalance</span>
+                <span className="text-2xl font-display">
+                  <span style={{ color: "#555865" }}>Code</span>
+                  <span style={{ color: "#0f60ec" }}>Balance</span>
+                </span>
               </a>
 
               <p className="text-muted-foreground leading-relaxed mb-8 max-w-md">

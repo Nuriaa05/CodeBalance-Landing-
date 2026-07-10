@@ -24,10 +24,10 @@ const testimonials = [
   // TODO: pendiente de confirmación del cliente
   {
     quote: "El sistema nos simplificó la gestión de stock. Lo que antes llevaba varios pasos, ahora es mucho más directo.",
-    author: "Mario González",
-    role: "Dueño",
-    company: "Mag Tecnología",
-    avatar: "M",
+    author: "Johanna Gomez",
+    role: "Sistema de stock",
+    company: "",
+    avatar: "J",
     metric: "Gestión de stock más ágil",
   },
   // TODO: pendiente de confirmación del cliente
@@ -99,7 +99,9 @@ export function TestimonialsSection() {
               <div>
                 <p className="text-lg font-medium text-foreground">{activeTestimonial.author}</p>
                 <p className="text-muted-foreground">
-                  {activeTestimonial.role}, {activeTestimonial.company}
+                  {activeTestimonial.company
+                    ? `${activeTestimonial.role}, ${activeTestimonial.company}`
+                    : activeTestimonial.role}
                 </p>
               </div>
             </div>

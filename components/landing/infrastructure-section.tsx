@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { X } from "lucide-react";
 import { OUTLINE_CTA_CLASS } from "./cta-styles";
 import { createWhatsAppUrl } from "./whatsapp";
 
@@ -14,12 +15,11 @@ type ProjectLinkKey =
   | "neutronMarketing";
 
 const projectLinks: Record<ProjectLinkKey, string | null> = {
-  // TODO: agregar link real cuando esté disponible.
-  stockAdmin: null,
+  stockAdmin: "https://youtu.be/3Svtx7zdaRU",
   medicalLanding: "https://drmasedo.com/",
   chacoImplantes: null,
   ecommerceBackend: null,
-  lozanoManagement: null,
+  lozanoManagement: "https://youtu.be/xLqZuCoOkx8",
   neutronMarketing: "https://www.instagram.com/nraccesoriosok/",
 };
 
@@ -52,6 +52,13 @@ const projects: Array<{
     href: projectLinks.stockAdmin,
   },
   {
+    id: "lozanoManagement",
+    name: "Sistema de gestión — Lozano Congelados",
+    category: "Sistema de gestión · En producción",
+    status: "production",
+    href: projectLinks.lozanoManagement,
+  },
+  {
     id: "chacoImplantes",
     name: "Chaco Implantes",
     category: "Sitio institucional · En desarrollo",
@@ -60,17 +67,10 @@ const projects: Array<{
   },
   {
     id: "ecommerceBackend",
-    name: "Backend e-commerce",
-    category: "Backend a medida · En desarrollo",
+    name: "Neutron Tecnología SAS — E-commerce",
+    category: "E-commerce a medida · En desarrollo",
     status: "development",
     href: projectLinks.ecommerceBackend,
-  },
-  {
-    id: "lozanoManagement",
-    name: "Sistema de gestión — Lozano Congelados",
-    category: "Sistema de gestión · En desarrollo",
-    status: "development",
-    href: projectLinks.lozanoManagement,
   },
 ];
 
@@ -85,7 +85,49 @@ const statusDotStyles = {
   },
 };
 
-function ProjectCaseButton({ href, status }: { href: string | null; status: ProjectStatus }) {
+type ProjectVideo = {
+  title: string;
+  embedUrl: string;
+};
+
+function getYouTubeVideoId(href: string) {
+  try {
+    const url = new URL(href);
+    const hostname = url.hostname.replace(/^www\./, "");
+
+    if (hostname === "youtu.be") {
+      return url.pathname.split("/").filter(Boolean)[0] ?? null;
+    }
+
+    if (hostname === "youtube.com" || hostname === "m.youtube.com") {
+      if (url.pathname.startsWith("/watch")) return url.searchParams.get("v");
+      if (url.pathname.startsWith("/embed/") || url.pathname.startsWith("/shorts/")) {
+        return url.pathname.split("/").filter(Boolean)[1] ?? null;
+      }
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function getYouTubeEmbedUrl(href: string) {
+  const videoId = getYouTubeVideoId(href);
+  return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0` : null;
+}
+
+function ProjectCaseButton({
+  href,
+  name,
+  status,
+  onOpenVideo,
+}: {
+  href: string | null;
+  name: string;
+  status: ProjectStatus;
+  onOpenVideo: (video: ProjectVideo) => void;
+}) {
   const buttonClassName =
     "shrink-0 rounded-full border border-[#0f60ec] px-4 py-2 text-xs font-medium text-[#0f60ec] transition-colors duration-200";
 
@@ -98,6 +140,20 @@ function ProjectCaseButton({ href, status }: { href: string | null; status: Proj
       <span aria-disabled="true" className={buttonClassName}>
         Ver caso
       </span>
+    );
+  }
+
+  const videoEmbedUrl = getYouTubeEmbedUrl(href);
+
+  if (videoEmbedUrl) {
+    return (
+      <button
+        type="button"
+        onClick={() => onOpenVideo({ title: name, embedUrl: videoEmbedUrl })}
+        className={`${buttonClassName} hover:bg-[#0f60ec] hover:text-white`}
+      >
+        Ver caso
+      </button>
     );
   }
 
@@ -115,8 +171,12 @@ function ProjectCaseButton({ href, status }: { href: string | null; status: Proj
 
 export function InfrastructureSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [caseCtaHasEntered, setCaseCtaHasEntered] = useState(false);
+  const [caseCtaEntranceComplete, setCaseCtaEntranceComplete] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<ProjectVideo | null>(null);
   const [activeLocation, setActiveLocation] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const caseCtaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -137,13 +197,67 @@ export function InfrastructureSection() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const caseCta = caseCtaRef.current;
+
+    if (!caseCta) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      const frame = window.requestAnimationFrame(() => setCaseCtaHasEntered(true));
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setCaseCtaHasEntered(true);
+        observer.unobserve(entry.target);
+      },
+      {
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(caseCta);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!caseCtaHasEntered) return;
+
+    const timeout = window.setTimeout(() => {
+      setCaseCtaEntranceComplete(true);
+    }, 700);
+
+    return () => window.clearTimeout(timeout);
+  }, [caseCtaHasEntered]);
+
+  useEffect(() => {
+    if (!activeVideo) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveVideo(null);
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeVideo]);
+
   return (
     <section id="infraestructura" ref={sectionRef} className="relative overflow-hidden bg-[#eaf1fd] py-24 lg:py-32">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-x-24 lg:gap-y-8">
           {/* Left: Content */}
           <div
-            className={`transition-all duration-700 ${
+            className={`order-1 transition-all duration-700 lg:col-start-1 lg:row-start-1 lg:self-end ${
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
             }`}
           >
@@ -164,25 +278,11 @@ export function InfrastructureSection() {
             <p className="text-lg text-muted-foreground leading-relaxed">
               Estos son algunos de los proyectos en los que estamos trabajando hoy.
             </p>
-
-            <div className="mt-8 flex flex-col items-start gap-4">
-              <p className="font-display text-2xl tracking-tight text-foreground">
-                ¿Tenés un proyecto en mente?
-              </p>
-              <a
-                href={createWhatsAppUrl("Hola, quiero contarles sobre mi proyecto.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={OUTLINE_CTA_CLASS}
-              >
-                Contanos tu proyecto
-              </a>
-            </div>
           </div>
 
           {/* Right: Location list */}
           <div
-            className={`transition-all duration-700 delay-200 ${
+            className={`order-2 transition-all duration-700 delay-200 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center ${
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
             }`}
           >
@@ -192,7 +292,7 @@ export function InfrastructureSection() {
                 <span className="text-sm font-mono text-muted-foreground">Nuestros proyectos</span>
                 <span className="flex items-center gap-2 text-xs font-mono text-accent">
                   <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                  3 en producción
+                  4 en producción
                 </span>
               </div>
 
@@ -220,15 +320,80 @@ export function InfrastructureSection() {
                         <div className="text-sm text-muted-foreground">{project.category}</div>
                       </div>
                     </div>
-                    <ProjectCaseButton href={project.href} status={project.status} />
+                    <ProjectCaseButton
+                      href={project.href}
+                      name={project.name}
+                      status={project.status}
+                      onOpenVideo={setActiveVideo}
+                    />
                   </div>
                   );
                 })}
               </div>
             </div>
           </div>
+
+          <div ref={caseCtaRef} className="order-3 flex flex-col items-start gap-4 lg:col-start-1 lg:row-start-2 lg:self-start">
+            <p
+              className={`font-display text-2xl tracking-tight text-foreground motion-safe:transition-[opacity,translate] motion-safe:duration-500 motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                caseCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+              }`}
+            >
+              ¿Tenés un proyecto en mente?
+            </p>
+            <a
+              href={createWhatsAppUrl("Hola, quiero contarles sobre mi proyecto.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${OUTLINE_CTA_CLASS} motion-safe:transition-[background-color,border-color,color,opacity,translate] motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                caseCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
+              } ${
+                caseCtaHasEntered && !caseCtaEntranceComplete ? "motion-safe:delay-200" : "motion-safe:delay-0"
+              } ${
+                caseCtaEntranceComplete ? "motion-safe:duration-200" : "motion-safe:duration-500"
+              }`}
+            >
+              Contanos tu proyecto
+            </a>
+          </div>
         </div>
       </div>
+
+      {activeVideo && (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-foreground/65 px-4 py-8 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Video de ${activeVideo.title}`}
+          onClick={() => setActiveVideo(null)}
+        >
+          <div
+            className="relative w-full max-w-4xl border border-background/20 bg-background shadow-[0_32px_90px_rgba(18,30,82,0.25)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-foreground/10 px-4 py-3 sm:px-5">
+              <p className="text-sm font-medium text-foreground">{activeVideo.title}</p>
+              <button
+                type="button"
+                onClick={() => setActiveVideo(null)}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-foreground/5 hover:text-foreground"
+                aria-label="Cerrar video"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="aspect-video bg-foreground">
+              <iframe
+                className="h-full w-full"
+                src={activeVideo.embedUrl}
+                title={activeVideo.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
