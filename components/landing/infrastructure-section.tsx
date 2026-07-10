@@ -333,7 +333,7 @@ export function InfrastructureSection() {
             </div>
           </div>
 
-          <div ref={caseCtaRef} className="order-3 flex flex-col items-start gap-4 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <div ref={caseCtaRef} className="order-3 flex flex-col items-center gap-4 text-center lg:col-start-1 lg:row-start-2 lg:items-start lg:self-start lg:text-left">
             <p
               className={`font-display text-2xl tracking-tight text-foreground motion-safe:transition-[opacity,translate] motion-safe:duration-500 motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
                 caseCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
