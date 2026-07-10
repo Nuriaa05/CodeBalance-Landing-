@@ -612,7 +612,7 @@ function ServicePillarCard({
                 {pillar.services.map((service) => (
                   <li
                     key={service.name}
-                    className="grid grid-cols-[150px_minmax(0,1fr)] gap-5 border-b border-foreground/10 py-3.5 last:border-b-0"
+                    className="grid grid-cols-1 gap-y-2 border-b border-foreground/10 py-3.5 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-x-5 sm:gap-y-0 last:border-b-0"
                   >
                     <h3 className="font-sans text-[13px] font-medium leading-relaxed text-foreground/80 sm:text-sm">
                       {service.name}
