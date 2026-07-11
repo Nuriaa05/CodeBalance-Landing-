@@ -10,6 +10,14 @@ import {
   shouldShowCookieConsentBanner,
   type CookieBannerVisibilityDetail,
 } from "@/lib/cookie-consent";
+import {
+  COOKIE_BANNER_ACTION_CLASS_NAME,
+  COOKIE_BANNER_CONTAINER_CLASS_NAME,
+  COOKIE_BANNER_CONTENT_CLASS_NAME,
+  COOKIE_BANNER_HIDDEN_CLASS_NAME,
+  COOKIE_BANNER_TEXT_CLASS_NAME,
+  COOKIE_BANNER_VISIBLE_CLASS_NAME,
+} from "@/lib/cookie-banner-layout";
 
 type CookieConsentBannerProps = {
   metaPixelId?: string;
@@ -146,23 +154,22 @@ export function CookieConsentBanner({ metaPixelId }: CookieConsentBannerProps) {
           ref={bannerRef}
           role="region"
           aria-label="Aviso de cookies"
-          className={`fixed inset-x-0 bottom-0 z-40 bg-[#0a1a3d] px-3 py-3 text-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)] transition-[opacity,transform] duration-300 ease-out min-[361px]:px-5 sm:px-8 sm:py-3.5 ${
-            isBannerVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+          className={`${COOKIE_BANNER_CONTAINER_CLASS_NAME} ${
+            isBannerVisible ? COOKIE_BANNER_VISIBLE_CLASS_NAME : COOKIE_BANNER_HIDDEN_CLASS_NAME
           }`}
         >
-          <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-2 min-[361px]:gap-4">
-            <p className="max-w-3xl text-[10px] font-normal leading-[1.4] text-white min-[361px]:text-[11px] min-[420px]:text-xs sm:text-[15px] sm:leading-relaxed">
-              <span className="block whitespace-nowrap sm:inline">
+          <div className={COOKIE_BANNER_CONTENT_CLASS_NAME}>
+            <p className={COOKIE_BANNER_TEXT_CLASS_NAME}>
+              <span>
                 Al navegar por este sitio{" "}
                 <strong className="font-bold">acept&aacute;s el uso de cookies</strong>
               </span>
-              <span className="hidden sm:inline"> </span>
-              <span className="block whitespace-nowrap sm:inline">para mejorar tu experiencia.</span>
+              <span> para mejorar tu experiencia.</span>
             </p>
             <button
               type="button"
               onClick={handleAccept}
-              className="inline-flex flex-shrink-0 items-center justify-center rounded-full border-[1.5px] border-white/85 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.04em] text-white transition-colors duration-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30 min-[361px]:px-5 min-[361px]:text-[11px] min-[420px]:px-6 min-[420px]:py-2.5 min-[420px]:text-xs min-[420px]:tracking-[0.05em] sm:px-7"
+              className={COOKIE_BANNER_ACTION_CLASS_NAME}
             >
               ENTENDIDO
             </button>
