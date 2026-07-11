@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  COOKIE_BANNER_VISIBLE_EVENT,
+  type CookieBannerVisibilityDetail,
+} from "@/lib/cookie-consent";
 import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { WHATSAPP_CONTACT_URL, WhatsAppIcon } from "./whatsapp";
 
 export function FloatingWhatsAppButton() {
   const [isVisible, setIsVisible] = useState(false);
+  const [cookieBannerHeight, setCookieBannerHeight] = useState(0);
 
   useEffect(() => {
     const hero = document.getElementById("inicio");
@@ -47,6 +52,25 @@ export function FloatingWhatsAppButton() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const handleCookieBannerVisibility = (event: Event) => {
+      const detail = (event as CustomEvent<CookieBannerVisibilityDetail>).detail;
+      setCookieBannerHeight(detail?.visible ? detail.height : 0);
+    };
+    const initialFrame = window.requestAnimationFrame(() => {
+      const isCookieBannerVisible = document.body.dataset.cookieBannerVisible === "true";
+      const measuredHeight = Number(document.body.dataset.cookieBannerHeight ?? 0);
+      setCookieBannerHeight(isCookieBannerVisible ? measuredHeight : 0);
+    });
+
+    window.addEventListener(COOKIE_BANNER_VISIBLE_EVENT, handleCookieBannerVisibility);
+
+    return () => {
+      window.cancelAnimationFrame(initialFrame);
+      window.removeEventListener(COOKIE_BANNER_VISIBLE_EVENT, handleCookieBannerVisibility);
+    };
+  }, []);
+
   return (
     <>
       <style>
@@ -85,7 +109,8 @@ export function FloatingWhatsAppButton() {
             method: "whatsapp",
           })
         }
-        className={`fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_14px_34px_rgba(37,211,102,0.28)] transition-[opacity,transform] duration-300 ease-out sm:h-[60px] sm:w-[60px] ${
+        style={{ bottom: cookieBannerHeight > 0 ? cookieBannerHeight + 24 : undefined }}
+        className={`fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_14px_34px_rgba(37,211,102,0.28)] transition-[bottom,opacity,transform] duration-300 ease-out sm:h-[60px] sm:w-[60px] ${
           isVisible
             ? "pointer-events-auto translate-y-0 opacity-100"
             : "pointer-events-none translate-y-3 opacity-0"
