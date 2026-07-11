@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { WHATSAPP_CONTACT_URL, WhatsAppIcon } from "./whatsapp";
 
 export function FloatingWhatsAppButton() {
@@ -77,6 +78,13 @@ export function FloatingWhatsAppButton() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp"
+        onClick={() =>
+          trackMetaPixelContactLeadClick({
+            label: "Contactar por WhatsApp",
+            location: "floating_whatsapp_button",
+            method: "whatsapp",
+          })
+        }
         className={`fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_14px_34px_rgba(37,211,102,0.28)] transition-[opacity,transform] duration-300 ease-out sm:h-[60px] sm:w-[60px] ${
           isVisible
             ? "pointer-events-auto translate-y-0 opacity-100"

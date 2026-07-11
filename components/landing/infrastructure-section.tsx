@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { X } from "lucide-react";
+import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { OUTLINE_CTA_CLASS } from "./cta-styles";
 import { createWhatsAppUrl } from "./whatsapp";
 
@@ -345,6 +346,13 @@ export function InfrastructureSection() {
               href={createWhatsAppUrl("Hola, quiero contarles sobre mi proyecto.")}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                trackMetaPixelContactLeadClick({
+                  label: "Contanos tu proyecto",
+                  location: "cases_section",
+                  method: "whatsapp",
+                })
+              }
               className={`${OUTLINE_CTA_CLASS} motion-safe:transition-[background-color,border-color,color,opacity,translate] motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
                 caseCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
               } ${

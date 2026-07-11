@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { AnimatedTetrahedron } from "./animated-tetrahedron";
 import { WHATSAPP_CONTACT_URL, WhatsAppIcon } from "./whatsapp";
 
@@ -101,7 +102,18 @@ export function CtaSection() {
                     size="lg"
                     className="bg-[#0f60ec] hover:bg-[#0f60ec] text-white px-8 h-14 text-base rounded-full group"
                   >
-                    <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noreferrer">
+                    <a
+                      href={WHATSAPP_CONTACT_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() =>
+                        trackMetaPixelContactLeadClick({
+                          label: "Contactanos",
+                          location: "cta_section",
+                          method: "whatsapp",
+                        })
+                      }
+                    >
                       <WhatsAppIcon />
                       Contactanos
                     </a>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { Menu, X } from "lucide-react";
 import { WHATSAPP_CONTACT_URL, WhatsAppIcon } from "./whatsapp";
 
@@ -166,7 +167,18 @@ export function Navigation() {
               size="sm"
               className={`bg-[#0f60ec] hover:bg-[#0f60ec] text-white rounded-full transition-all duration-500 ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
             >
-              <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noreferrer">
+              <a
+                href={WHATSAPP_CONTACT_URL}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() =>
+                  trackMetaPixelContactLeadClick({
+                    label: "Contactanos",
+                    location: "navigation_desktop",
+                    method: "whatsapp",
+                  })
+                }
+              >
                 <WhatsAppIcon />
                 Contactanos
               </a>
@@ -245,9 +257,20 @@ export function Navigation() {
             <Button 
               asChild
               className="flex-1 bg-[#0f60ec] text-white rounded-full h-14 text-base"
-              onClick={() => setIsMobileMenuOpen(false)}
             >
-              <a href={WHATSAPP_CONTACT_URL} target="_blank" rel="noreferrer">
+              <a
+                href={WHATSAPP_CONTACT_URL}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  trackMetaPixelContactLeadClick({
+                    label: "Contactanos",
+                    location: "navigation_mobile",
+                    method: "whatsapp",
+                  });
+                }}
+              >
                 <WhatsAppIcon />
                 Contactanos
               </a>

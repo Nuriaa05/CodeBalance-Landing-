@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { OUTLINE_CTA_CLASS, SERVICE_OUTLINE_CTA_CLASS } from "./cta-styles";
 import { createWhatsAppUrl } from "./whatsapp";
 
@@ -628,6 +629,14 @@ function ServicePillarCard({
                   href={whatsappMessageUrl(`Hola, quiero consultar por ${pillar.title}`)}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() =>
+                    trackMetaPixelContactLeadClick({
+                      label: `Consultar por ${pillar.title}`,
+                      location: "services_section",
+                      method: "whatsapp",
+                      service: pillar.title,
+                    })
+                  }
                   className={SERVICE_OUTLINE_CTA_CLASS}
                 >
                   Consultar por {pillar.title}
@@ -825,6 +834,13 @@ export function FeaturesSection() {
             href={whatsappMessageUrl("Hola, quiero contarles sobre mi proyecto.")}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              trackMetaPixelContactLeadClick({
+                label: "Contanos tu proyecto",
+                location: "services_final_cta",
+                method: "whatsapp",
+              })
+            }
             className={`${OUTLINE_CTA_CLASS} motion-safe:transition-[background-color,border-color,color,opacity,translate] motion-safe:ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
               finalCtaHasEntered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"
             } ${

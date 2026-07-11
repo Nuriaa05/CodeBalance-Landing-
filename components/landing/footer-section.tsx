@@ -1,6 +1,7 @@
 "use client";
 
 import { siGmail, siInstagram, siWhatsapp, type SimpleIcon } from "simple-icons";
+import { trackMetaPixelContactLeadClick } from "@/lib/meta-pixel";
 import { AnimatedWave } from "./animated-wave";
 import { WHATSAPP_URL } from "./whatsapp";
 
@@ -19,10 +20,10 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { name: "Instagram", href: "https://www.instagram.com/codebalance_/", icon: siInstagram },
-  { name: "WhatsApp", href: WHATSAPP_URL, icon: siWhatsapp },
-  { name: "Gmail", href: "mailto:infocodebalance@gmail.com", icon: siGmail },
-];
+  { name: "Instagram", href: "https://www.instagram.com/codebalance_/", icon: siInstagram, contactMethod: null },
+  { name: "WhatsApp", href: WHATSAPP_URL, icon: siWhatsapp, contactMethod: "whatsapp" },
+  { name: "Gmail", href: "mailto:infocodebalance@gmail.com", icon: siGmail, contactMethod: "email" },
+] as const;
 
 function SimpleIconLogo({ icon }: { icon: SimpleIcon }) {
   return (
@@ -67,6 +68,15 @@ export function FooterSection() {
                     aria-label={link.name}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                    onClick={() => {
+                      if (!link.contactMethod) return;
+
+                      trackMetaPixelContactLeadClick({
+                        label: link.name,
+                        location: "footer_social",
+                        method: link.contactMethod,
+                      });
+                    }}
                   >
                     <SimpleIconLogo icon={link.icon} />
                   </a>
