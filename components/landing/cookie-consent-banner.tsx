@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { trackMetaPixelPageView } from "@/lib/meta-pixel";
 import {
   COOKIE_BANNER_VISIBLE_EVENT,
   COOKIE_CONSENT_ACCEPTED_VALUE,
@@ -44,9 +45,21 @@ export function CookieConsentBanner({ metaPixelId }: CookieConsentBannerProps) {
   const acceptedFrameRef = useRef<number | null>(null);
   const showFrameRef = useRef<number | null>(null);
   const bannerRef = useRef<HTMLDivElement | null>(null);
+  const hasTrackedPageViewRef = useRef(false);
   const pixelId = metaPixelId ? JSON.stringify(metaPixelId) : null;
 
   const getBannerHeight = () => bannerRef.current?.getBoundingClientRect().height ?? 0;
+
+  useEffect(() => {
+    if (!hasAccepted || !metaPixelId || hasTrackedPageViewRef.current) return;
+
+    // Wait until Next has inserted the inline pixel bootstrap, without waiting for Meta's network.
+    const frame = window.requestAnimationFrame(() => {
+      hasTrackedPageViewRef.current = true;
+      trackMetaPixelPageView();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [hasAccepted, metaPixelId]);
 
   useEffect(() => {
     const cleanupTimers = () => {
@@ -144,7 +157,6 @@ export function CookieConsentBanner({ metaPixelId }: CookieConsentBannerProps) {
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('set', 'autoConfig', false, ${pixelId});
             fbq('init', ${pixelId});
-            fbq('track', 'PageView');
           `}
         </Script>
       )}
